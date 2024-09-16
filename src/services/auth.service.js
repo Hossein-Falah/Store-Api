@@ -3,7 +3,7 @@ const createHttpError = require("http-errors");
 
 const UserModel = require("../models/user.model");
 const { HashPassword, ComparePassword } = require("../utils/hash.utils");
-const { signAccessToken, signRefreshToken } = require("../utils/token.utils");
+const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../utils/token.utils");
 
 class AuthService {
     #model;
@@ -35,14 +35,14 @@ class AuthService {
         return { accessToken, refreshToken };
     }
 
-    async login(userData) {
-        const user = await this.checkExistsUser(userData.email);
+    async login({ email, password }) {
+        const user = await this.checkExistsUser(email);
 
-        const isMatchPassword = ComparePassword(userData.password, user.password);
+        const isMatchPassword = ComparePassword(password, user.password);
         if (!isMatchPassword) throw new createHttpError.Unauthorized('ایمیل یا رمزعبور اشتباه می باشد');
 
-        const accessToken = signAccessToken({ email: userData.email });
-        const refreshToken = signRefreshToken({ email: userData.email });
+        const accessToken = signAccessToken({ email });
+        const refreshToken = signRefreshToken({ email });
 
         user.refreshToken = refreshToken;
         await user.save();
@@ -50,8 +50,17 @@ class AuthService {
         return { accessToken, refreshToken };
     }
 
-    async refreshToken() {
+    async refreshToken({ refreshToken }) {
+        const email = await verifyRefreshToken(refreshToken);
+        const user = await this.#model.findOne({ email });
 
+        const accessToken = signAccessToken({ email: user.email });
+        const newRefreshToken = signRefreshToken({ email: user.email });
+
+        user.refreshToken = newRefreshToken;
+        user.save();
+
+        return { accessToken, newRefreshToken };
     }
 
     async forgetPassword() {

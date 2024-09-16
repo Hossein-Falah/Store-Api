@@ -39,9 +39,9 @@
  *          RefreshToken:
  *              type: object
  *              required:
- *                  -   refresh-token
+ *                  -   refreshToken
  *              properties:
- *                  refresh-token:
+ *                  refreshToken:
  *                      type: string
  *                      description: the refresh token
  *          ForgetPassword:

@@ -1,7 +1,8 @@
 const autoBind = require("auto-bind");
+const { StatusCodes } = require("http-status-codes");
+
 const authService = require("../services/auth.service");
 const { signupValidation, loginValidation } = require("../validations/auth.validation");
-const { StatusCodes } = require("http-status-codes");
 
 class AuthController {
     #service;
@@ -49,7 +50,14 @@ class AuthController {
 
     async refreshToken(req, res, next) {
         try {
+            const { refreshToken } = req.body;            
             
+            const user = await this.#service.refreshToken({ refreshToken });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                data: user
+            })
         } catch (error) {
             next(error);
         }
