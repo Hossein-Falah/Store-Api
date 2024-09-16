@@ -32,7 +32,12 @@ const UserSchema = new Schema({
         type: String,
         enum: ["ADMIN", "USER"],
         default: "USER"
-    }
+    },
+    refreshToken: { 
+        type: String, 
+        required: true, 
+        unique: true 
+    },
 }, {
     timestamps: true
 })
