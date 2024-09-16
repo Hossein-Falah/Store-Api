@@ -1,18 +1,61 @@
-const { StatusCodes } = require("http-status-codes");
-const Controller = require("./controller");
+const authService = require("../services/auth.service");
+const autoBind = require("auto-bind");
 
-class AuthController extends Controller {
+class AuthController {
+    #service;
+
+    constructor() {
+        autoBind(this)
+        this.#service = authService
+    }
+
+    async signup(req, res, next) {
+        try {
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async login(req, res, next) {
         try {
-            res.status(StatusCodes.OK).json({
-                message: "login successfully"
-            })
+            
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async refreshToken(req, res, next) {
+        try {
+            
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async forgetPassword(req, res, next) {
+        try {
+            
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async resetPassword(req, res, next) {
+        try {
+            
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getMe(req, res, next) {
+        try {
+            
         } catch (error) {
             next(error);
         }
     }
 }
 
-module.exports = {
-    AuthController: new AuthController()
-}
+module.exports =  new AuthController();
