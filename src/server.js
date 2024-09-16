@@ -4,9 +4,11 @@ require("dotenv").config();
 const morgan = require('morgan');
 const express = require('express');
 const createHttpError = require('http-errors');
+const swaggerUi = require('swagger-ui-express');
 
 const ConnectToDB = require('./configs/db.config');
 const { AllRoutes } = require('./routes/index.routes');
+const swaggerOptions = require('./configs/swagger.config');
 
 class Application {
     #app = express();
@@ -31,12 +33,13 @@ class Application {
         this.#app.use(cors());
         this.#app.use(express.json())
         this.#app.use(express.urlencoded({ extended: true }));
+        this.#app.use('/api-document', swaggerUi.serve, swaggerOptions)
     }
 
     createServer() {
         const server = http.createServer(this.#app);
         server.listen(this.#PORT, () => {
-            console.log(`✅ Server is running on port: ${this.#PORT}`);
+            console.log(`✅ Server is running on Url: http://localhost:${this.#PORT}`);
         });
     }
 
