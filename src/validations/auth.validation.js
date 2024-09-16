@@ -7,8 +7,14 @@ const signupValidation = Joi.object({
     email: Joi.string().required("ایمیل نمی تواند خالی باشد").error(createHttpError.BadRequest("ایمیل صحیح نمی باشد")),
     password: Joi.string().min(8).max(20).required("رمز عبور نمی تواند خالی باشد").error(createHttpError.BadRequest("رمز عبور صحیح نمی باشد")),
     phone: Joi.string().length(11).pattern(/^09[0-9]{9}$/).error(createHttpError.BadRequest("شماره وارد شده صحیح نمی باشد")),
-})
+});
+
+const loginValidation = Joi.object({
+    email: Joi.string().required("ایمیل نمی تواند خالی باشد").error(createHttpError.BadRequest("ایمیل صحیح نمی باشد")),
+    password: Joi.string().min(8).max(20).required("رمز عبور نمی تواند خالی باشد").error(createHttpError.BadRequest("رمز عبور صحیح نمی باشد"))
+});
 
 module.exports = {
-    signupValidation
+    signupValidation,
+    loginValidation
 }

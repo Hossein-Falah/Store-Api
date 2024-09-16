@@ -2,7 +2,7 @@ const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
 
 const UserModel = require("../models/user.model");
-const HashPassword = require("../utils/hash.utils");
+const { HashPassword, ComparePassword } = require("../utils/hash.utils");
 const { signAccessToken, signRefreshToken } = require("../utils/token.utils");
 
 class AuthService {
@@ -35,8 +35,19 @@ class AuthService {
         return { accessToken, refreshToken };
     }
 
-    async login() {
+    async login(userData) {
+        const user = await this.checkExistsUser(userData.email);
 
+        const isMatchPassword = ComparePassword(userData.password, user.password);
+        if (!isMatchPassword) throw new createHttpError.Unauthorized('ایمیل یا رمزعبور اشتباه می باشد');
+
+        const accessToken = signAccessToken({ email: userData.email });
+        const refreshToken = signRefreshToken({ email: userData.email });
+
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        return { accessToken, refreshToken };
     }
 
     async refreshToken() {
@@ -55,8 +66,9 @@ class AuthService {
 
     }
 
-    async checkExistsUser(username, email) {
-        const user = await this.#model.findOne({ $or: [{ username }, { email }] });
+    async checkExistsUser(email) {
+        const user = await this.#model.findOne({ email });
+        if (!user) throw new createHttpError.NotFound("کاربری با چنین مشخصاتی یافت نشد")
         return user
     }
 }

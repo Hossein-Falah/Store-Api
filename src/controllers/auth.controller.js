@@ -1,6 +1,6 @@
 const autoBind = require("auto-bind");
 const authService = require("../services/auth.service");
-const { signupValidation } = require("../validations/auth.validation");
+const { signupValidation, loginValidation } = require("../validations/auth.validation");
 const { StatusCodes } = require("http-status-codes");
 
 class AuthController {
@@ -31,7 +31,17 @@ class AuthController {
 
     async login(req, res, next) {
         try {
-            
+            const { email, password } = req.body;
+
+            await loginValidation.validateAsync({ email, password });
+
+            const user = await this.#service.login({ email, password });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message: "کاربر با موفقعیت لاگین شد",
+                data: user
+            })
         } catch (error) {
             next(error);
         }

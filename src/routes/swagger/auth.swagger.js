@@ -82,9 +82,11 @@
  *                          $ref: '#/components/schemas/SignUp'
  *          responses:
  *              201:
- *                  description: success
+ *                  description: The User Registered SuccessFully :))
  *              401:
- *                  description: bad Request
+ *                  description: The User Already Registered With Email Or Usersname
+ *              403:
+ *                  description: The User Phone Was Banned
  *              500:
  *                  description: server error
  */
@@ -104,7 +106,7 @@
  *                      schema:
  *                          $ref: '#/components/schemas/Login'
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  *              401:
  *                  description: bad Request
@@ -127,7 +129,7 @@
  *                      schema:
  *                          $ref: '#/components/schemas/RefreshToken'
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  *              401:
  *                  description: bad Request
@@ -150,7 +152,7 @@
  *                      schema:
  *                          $ref: '#/components/schemas/ForgetPassword'
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  *              401:
  *                  description: bad Request
@@ -173,7 +175,7 @@
  *                      schema:
  *                          $ref: '#/components/schemas/ResetPassword'
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  *              401:
  *                  description: bad Request
@@ -188,7 +190,7 @@
  *          tags: [Auth 🔒]
  *          summary: get me
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  *              401:
  *                  description: bad Request
