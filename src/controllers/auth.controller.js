@@ -99,7 +99,12 @@ class AuthController {
 
     async getMe(req, res, next) {
         try {
-            
+            const user = await this.#service.getMe(req);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                data: user
+            })
         } catch (error) {
             next(error);
         }

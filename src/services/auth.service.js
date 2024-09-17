@@ -115,8 +115,13 @@ class AuthService {
         user.save();
     }
 
-    async getMe() {
+    async getMe(req) {
+        if (!req.user) throw new createHttpError.Unauthorized("لطفا مجددا وارد شوید");
 
+        const userId = req.user._id;
+        const user = await this.#model.findById(userId, { password: 0 });
+
+        return user;
     }
 
     async checkExistsUser(email) {

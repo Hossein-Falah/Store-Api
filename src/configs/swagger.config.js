@@ -19,9 +19,9 @@ const swaggerOptions = swaggerUI.setup(
             ],
             components: {
                 securitySchemes: {
-                    BearerAuth: {
+                    BearerAuth : {
                         type: "http",
-                        schema: "bearer",
+                        scheme: "bearer",
                         bearerFormat: "JWT"
                     }
                 }
@@ -29,7 +29,8 @@ const swaggerOptions = swaggerUI.setup(
             security: [{ BearerAuth: [] }]
         },
         apis: ['./src/routes/swagger/*.js']
-    })
+    }),
+    { explorer: true }
 );
 
 module.exports = swaggerOptions
