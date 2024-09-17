@@ -2,7 +2,7 @@ const autoBind = require("auto-bind");
 const { StatusCodes } = require("http-status-codes");
 
 const authService = require("../services/auth.service");
-const { signupValidation, loginValidation } = require("../validations/auth.validation");
+const { signupValidation, loginValidation, forgetPasswordValidation } = require("../validations/auth.validation");
 
 class AuthController {
     #service;
@@ -65,7 +65,17 @@ class AuthController {
 
     async forgetPassword(req, res, next) {
         try {
-            
+            const { email } = req.body;
+
+            await forgetPasswordValidation.validateAsync({ email });
+
+            const user = await this.#service.forgetPassword({ email });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message: "لینک بازیابی پسورد به ایمیل شما ارسال شد",
+                data: user
+            })
         } catch (error) {
             next(error);
         }
@@ -73,7 +83,15 @@ class AuthController {
 
     async resetPassword(req, res, next) {
         try {
-            
+            const { token } = req.params;
+            const { password } = req.body;
+
+            await this.#service.resetPassword({ token, password });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message: "پسورد با موفقعیت تغییر کرد",
+            })
         } catch (error) {
             next(error);
         }

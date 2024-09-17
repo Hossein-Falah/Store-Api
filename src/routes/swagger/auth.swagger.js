@@ -162,10 +162,15 @@
 
 /**
  * @swagger
- *  /auth/reset-password:
+ *  /auth/reset-password/{token}:
  *      post:
  *          tags: [Auth 🔒]
  *          summary: reset password
+ *          parameters:
+ *              - in: path
+ *                required: true
+ *                name: token
+ *                type: string
  *          requestBody:
  *              content:
  *                  application/json:

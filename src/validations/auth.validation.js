@@ -14,7 +14,12 @@ const loginValidation = Joi.object({
     password: Joi.string().min(8).max(20).required("رمز عبور نمی تواند خالی باشد").error(createHttpError.BadRequest("رمز عبور باید بین 8 تا 20 کاراکتر باشد"))
 });
 
+const forgetPasswordValidation = Joi.object({
+    email: Joi.string().required("ایمیل نمی تواند خالی باشد").error(createHttpError.BadRequest("ایمیل صحیح نمی باشد"))
+});
+
 module.exports = {
     signupValidation,
-    loginValidation
+    loginValidation,
+    forgetPasswordValidation
 }

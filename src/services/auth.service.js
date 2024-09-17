@@ -1,5 +1,7 @@
+const jwt = require("jsonwebtoken");
 const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
+const nodemailer = require('nodemailer')
 
 const UserModel = require("../models/user.model");
 const { HashPassword, ComparePassword } = require("../utils/hash.utils");
@@ -63,12 +65,54 @@ class AuthService {
         return { accessToken, newRefreshToken };
     }
 
-    async forgetPassword() {
+    async forgetPassword({ email }) {
+        // search user with email
+        const user = await this.#model.findOne({ email });
+        
+        // check exsist user
+        if (!user) throw new createHttpError.NotFound("کاربر مورد نظر یافت نشد");
 
+        // create token for reset password
+        const resetToken = jwt.sign({ email }, process.env.RESET_PASSWORD_SECRET_KEY, { expiresIn: '1h' });
+
+        // create url for reset password
+        const resetUrl = `${process.env.BASE_URL}/auth/reset-password/${resetToken}`;
+
+        // send email
+        const transport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        });
+
+        const sendMessage = await transport.sendMail({
+            from: process.env.EMAIL,
+            to: user.email,
+            subject: "بازیابی رمز عبور",
+            html: `
+                <p>Click the following link to reset your password:</p>
+                <a href="${resetUrl}">Reset Password</a>
+                <p>This link is valid for 1 hour.</p>
+            `
+        });
+        return sendMessage
     }
 
-    async resetPassword() {
+    async resetPassword({ token, password }) {
+        // authentication token reset password
+        const decoded = jwt.decode(token, process.env.RESET_PASSWORD_SECRET_KEY);
 
+        // search user with email
+        const user = await this.#model.findOne({ email: decoded?.email });
+        if (!user) throw new createHttpError.NotFound("کاربر مورد نظر یافت نشد");
+
+        // hash new password user
+        const hashedPassword = HashPassword(password);
+
+        user.password = hashedPassword;
+        user.save();
     }
 
     async getMe() {
