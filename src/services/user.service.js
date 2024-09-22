@@ -1,4 +1,6 @@
 const autoBind = require("auto-bind");
+const createHttpError = require('http-errors');
+
 const UserModel = require("../models/user.model");
 
 class UserService {
@@ -15,8 +17,10 @@ class UserService {
         return users;
     }
 
-    async getUserById() {
-
+    async getUserById(userId) {
+        const user = await this.#model.findById(userId, { password: 0, __v: 0, refreshToken: 0 });
+        if (!user) throw new createHttpError.NotFound("کاربری با این مشخصات یافت نشد");
+        return user;
     }
 
     async createUser() {
