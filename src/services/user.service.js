@@ -10,7 +10,9 @@ class UserService {
     }
 
     async getAllUsers() {
-
+        const users = await this.#model.find({}, { password: 0, __v: 0, refreshToken: 0 }, { sort: { createdAt: -1 } });
+        
+        return users;
     }
 
     async getUserById() {

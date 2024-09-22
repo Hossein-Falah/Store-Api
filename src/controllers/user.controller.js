@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const userService = require("../services/user.service");
+const { StatusCodes } = require("http-status-codes");
 
 class UserController {
     #service
@@ -11,7 +12,12 @@ class UserController {
 
     async getAllUsers(req, res, next) {
         try {
-            
+            const users = await this.#service.getAllUsers();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                users
+            })
         } catch (error) {
             next(error)
         }
