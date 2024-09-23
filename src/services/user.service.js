@@ -58,8 +58,19 @@ class UserService {
         return { message: "خطایی رخ داده است" };
     }
 
-    async unbanUser() {
+    async unbanUser(id) {
+        const user = await this.#model.findOne({ _id: id });
+        if (!user) throw new createHttpError.NotFound("کاربری با این مشخصات یافت نشد");
+        
+        const banUser = await this.#banModel.findOne({ phone: user.phone });
+        if (!banUser) throw new createHttpError.Forbidden("کاربر مسدود نشده است");
 
+        const unbanUserResult = await this.#banModel.deleteOne({ phone: user.phone });
+        if (!unbanUserResult.deletedCount) throw new createHttpError.InternalServerError("خطایی رخ داده است");
+        
+        if (unbanUserResult) {
+            return { message: "کاربر از مسدودیت خارج شد" };
+        }
     }
 
     async changeUserRole({ userId, role }) {

@@ -1,6 +1,7 @@
 const autoBind = require("auto-bind");
-const userService = require("../services/user.service");
 const { StatusCodes } = require("http-status-codes");
+
+const userService = require("../services/user.service");
 const { objectIdValidation } = require("../validations/id.validation");
 const { userValidation } = require("../validations/user.validation");
 
@@ -99,7 +100,16 @@ class UserController {
 
     async unbanUser(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const message = await this.#service.unbanUser(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message
+            })
         } catch (error) {
             next(error);
         }
