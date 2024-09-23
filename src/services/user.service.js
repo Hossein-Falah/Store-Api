@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const createHttpError = require('http-errors');
 
 const UserModel = require("../models/user.model");
+const { deleteInvalidPropertyObject } = require("../utils/function.utils");
 
 class UserService {
     #model
@@ -23,12 +24,12 @@ class UserService {
         return user;
     }
 
-    async createUser() {
+    async updateUser(userData) {
+        const { username, name, email } = userData;
 
-    }
-
-    async updateUser() {
-
+        deleteInvalidPropertyObject(userData, [undefined, null, "", " ", NaN, 0, false]);
+        const userResult = await this.#model.updateOne({ _id: userData.id }, { $set: { username, name, email } });
+        if(!userResult.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
     }
 
     async deleteUser() {

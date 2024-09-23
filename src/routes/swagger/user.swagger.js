@@ -28,10 +28,6 @@
  *                      type: string
  *                  email:
  *                      type: string
- *                  phone:
- *                      type: string
- *                  role:
- *                      type: string
  *          Update-Role:
  *              type: object
  *              properties:
@@ -74,29 +70,6 @@
  *                      application/json:
  *                          schema:
  *                              $ref: '#/components/schemas/User'
- */
-
-/**
- * @swagger
- *  /user/create:
- *      post:
- *          tags: [User]
- *          summary: create user
- *          requestBody:
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/User'
- *                  application/x-www-form-urlencoded:
- *                      schema:
- *                          $ref: '#/components/schemas/User'
- *          responses:
- *              201:
- *                  description: success
- *              400:
- *                  description: bad Request
- *              500:
- *                  description: server error
  */
 
 /**

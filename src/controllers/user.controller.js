@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const userService = require("../services/user.service");
 const { StatusCodes } = require("http-status-codes");
 const { objectIdValidation } = require("../validations/id.validation");
+const { userValidation } = require("../validations/user.validation");
 
 class UserController {
     #service
@@ -41,17 +42,23 @@ class UserController {
         }
     }
 
-    async createUser(req, res, next) {
-        try {
-            
-        } catch (error) {
-            next(error);
-        }
-    }
-
     async updateUser(req, res, next) {
         try {
+            const { id } = req.params;
+            const { username, name, email } = req.body;
             
+            await objectIdValidation.validateAsync({ id });
+            
+            if (username && name && email) {
+                await userValidation.validateAsync({ username, name, email });
+            }
+            
+            await this.#service.updateUser({ id, username, name, email });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message: "به روزرسانی با موفقیت انجام شد",
+            })
         } catch (error) {
             next(error);
         }
