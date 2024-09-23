@@ -66,7 +66,15 @@ class UserController {
 
     async deleteUser(req, res, next) {
         try {
-            
+            const { id } = req.params;
+            const { id: userId } = await objectIdValidation.validateAsync({ id });
+
+            await this.#service.deleteUser(userId);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message: "کاربر با موفقیت حذف شد"
+            });
         } catch (error) {
             next(error)
         }

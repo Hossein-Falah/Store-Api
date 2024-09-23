@@ -32,8 +32,9 @@ class UserService {
         if(!userResult.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
     }
 
-    async deleteUser() {
-
+    async deleteUser(userId) {
+        const userResult = await this.#model.deleteOne({ _id: userId });
+        if(!userResult.deletedCount) throw new createHttpError.NotFound("حذف انجام نشد");
     }
 
     async banUser() {
