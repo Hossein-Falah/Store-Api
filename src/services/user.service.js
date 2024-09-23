@@ -45,8 +45,15 @@ class UserService {
 
     }
 
-    async changeUserRole() {
-        
+    async changeUserRole({ userId, role }) {
+        const user = await this.#model.findOne({ _id: userId });
+        if(!user) throw new createHttpError.NotFound("کاربری با این مشخصات یافت نشد");
+
+        const changeRoleResult = await this.#model.findOneAndUpdate({ _id: userId }, { $set: { role }});
+
+        if(!changeRoleResult) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
+
+        return { message: `نقش کاربر به ${role} تغییر کرد` };
     }
 }
 

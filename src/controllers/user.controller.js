@@ -98,7 +98,16 @@ class UserController {
 
     async changeUserRole(req, res, next) {
         try {
-            
+            const { id } = req.params;
+            const { role } = req.body;
+            const { id: userId } = await objectIdValidation.validateAsync({ id });
+
+            const message = await this.#service.changeUserRole({ userId, role });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message
+            })
         } catch (error) {
             next(error);
         }
