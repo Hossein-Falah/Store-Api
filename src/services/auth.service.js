@@ -3,16 +3,19 @@ const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
 const nodemailer = require('nodemailer')
 
+const BanModel = require("../models/ban.model");
 const UserModel = require("../models/user.model");
 const { HashPassword, ComparePassword } = require("../utils/hash.utils");
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../utils/token.utils");
 
 class AuthService {
     #model;
+    #banModel;
 
     constructor() {
         autoBind(this);
         this.#model = UserModel;
+        this.#banModel = BanModel
     }
 
     async signup(userData) {
@@ -22,6 +25,9 @@ class AuthService {
         const hashedPassword = HashPassword(userData.password);
         const accessToken = signAccessToken({ email: userData.email });
         const refreshToken = signRefreshToken({ email: userData.email });
+       
+        const isBanExist = await this.#banModel.findOne({ phone: userData.phone });
+        if (isBanExist) throw new createHttpError.Forbidden("شماره تلفن شما بلاک شده و امکان ثبت نام وجود ندارد");
         
         const userCount = await this.#model.countDocuments();
 
@@ -39,6 +45,9 @@ class AuthService {
 
     async login({ email, password }) {
         const user = await this.checkExistsUser(email);
+
+        const isBanExist = await this.#banModel.findOne({ phone: user.phone });
+        if (isBanExist) throw new createHttpError.Forbidden("شماره تلفن شما بلاک شده و امکان لاگین وجود ندارد");
 
         const isMatchPassword = ComparePassword(password, user.password);
         if (!isMatchPassword) throw new createHttpError.Unauthorized('ایمیل یا رمزعبور اشتباه می باشد');
