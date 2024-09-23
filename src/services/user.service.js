@@ -2,14 +2,17 @@ const autoBind = require("auto-bind");
 const createHttpError = require('http-errors');
 
 const UserModel = require("../models/user.model");
+const BanModel = require("../models/ban.model");
 const { deleteInvalidPropertyObject } = require("../utils/function.utils");
 
 class UserService {
     #model
+    #banModel;
 
     constructor() {
         autoBind(this);
         this.#model = UserModel;
+        this.#banModel = BanModel;
     }
 
     async getAllUsers() {
@@ -37,8 +40,22 @@ class UserService {
         if(!userResult.deletedCount) throw new createHttpError.NotFound("حذف انجام نشد");
     }
 
-    async banUser() {
+    async banUser(userId) {
+        const user = await this.#model.findOne({ _id: userId });
+        if (!user) throw new createHttpError.NotFound("کاربری با این مشخصات یافت نشد");
+        
+        const banUser = await this.#banModel.findOne({ phone: user.phone });
+        if (banUser) throw new createHttpError.Conflict("کاربر قبلا مسدود شد");
+       
+        if (user.role === "ADMIN") throw new createHttpError.Forbidden("مدیران را نمیتوانن مسدود کرد");
 
+        const banUserResult = await this.#banModel.create({ phone: user.phone });
+    
+        if (banUserResult) {
+            return { message: "کاربر مسدود شد" };
+        }
+
+        return { message: "خطایی رخ داده است" };
     }
 
     async unbanUser() {

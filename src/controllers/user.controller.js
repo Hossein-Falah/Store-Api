@@ -82,7 +82,16 @@ class UserController {
 
     async banUser(req, res, next) {
         try {
+            const { id } = req.params;
+
+            const { id: userId } = await objectIdValidation.validateAsync({ id });
             
+            const message = await this.#service.banUser(userId);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                message
+            })
         } catch (error) {
             next(error);
         }
