@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const CategoriesService = require("../services/categories.service");
+const { StatusCodes } = require("http-status-codes");
 
 class CategoriesController {
     #service;
@@ -10,7 +11,12 @@ class CategoriesController {
     };
 
     async getAllCategories(req, res, next) {
+        const categories = await this.#service.getAllCategories();
 
+        return res.status(StatusCodes.OK).json({
+            statusCode: StatusCodes.OK,
+            categories
+        })
     };
 
     async getCategoryById(req, res, next) {

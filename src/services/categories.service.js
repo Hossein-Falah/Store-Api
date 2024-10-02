@@ -10,7 +10,8 @@ class CategoriesService {
     }
 
     async getAllCategories() {
-
+        const category = await this.#model.find({ parent: null }, { __v: 0 });
+        return category;
     };
 
     async getCategoryById() {
