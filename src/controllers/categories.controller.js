@@ -1,7 +1,7 @@
 const autoBind = require("auto-bind");
 const CategoriesService = require("../services/categories.service");
 const { StatusCodes } = require("http-status-codes");
-const { addCategoryValidation } = require("../validations/categories.validation");
+const { addCategoryValidation, updateCategoryValidation } = require("../validations/categories.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class CategoriesController {
@@ -45,7 +45,17 @@ class CategoriesController {
     };
 
     async updateCategory(req, res, next) {
+        const { id } = req.params;
+        const { name } = req.body;
 
+        await updateCategoryValidation.validateAsync({ name });
+
+        await this.#service.updateCategory({id, name});
+
+        return res.status(StatusCodes.OK).json({
+            statusCode: StatusCodes.OK,
+            message: "به روزرسانی با موفقیت انجام شد"
+        });
     };
 
     async deleteCategory(req, res, next) {

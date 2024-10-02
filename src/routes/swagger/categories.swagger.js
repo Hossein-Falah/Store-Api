@@ -13,6 +13,14 @@
  *                  parent:
  *                      type: string
  *                      description: category parent
+ *          UpdateCategory:
+ *              type: object
+ *              required:
+ *                  -   name
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                      description: category name
  */
 
 /**
@@ -82,10 +90,10 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Category'
+ *                          $ref: '#/components/schemas/UpdateCategory'
  *                  application/x-www-form-urlencoded:
  *                      schema:
- *                          $ref: '#/components/schemas/Category'
+ *                          $ref: '#/components/schemas/UpdateCategory'
  *          responses:
  *              200:
  *                  description: success

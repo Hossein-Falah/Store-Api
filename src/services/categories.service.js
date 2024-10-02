@@ -42,11 +42,14 @@ class CategoriesService {
 
     async createCategory({ name, parent }) {        
         const category = await this.#model.create({ name, parent });
-        if (!category) throw new Error("دسته بندی ایجاد نشد");
+        if (!category) throw new createHttpError.NotFound("دسته بندی ایجاد نشد");
     };
 
-    async updateCategory() {
 
+    async updateCategory({ id, name }) {
+        await this.checkExistCategory(id);
+        const resultUpdate = await this.#model.updateOne({ _id: id }, { $set: { name } });
+        if (!resultUpdate.modifiedCount) throw new createHttpError("بروزرسانی انجام نشد");
     };
 
     async deleteCategory() {
@@ -60,6 +63,12 @@ class CategoriesService {
     async getChildCategories() {
 
     };
+
+    async checkExistCategory(id) {
+        const category = await this.#model.findById(id);
+        if (!category) throw new createHttpError.NotFound("دسته بندی یافت نشد");
+        return category;
+    }
 };
 
 module.exports = new CategoriesService();
