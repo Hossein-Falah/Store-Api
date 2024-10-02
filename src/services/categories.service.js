@@ -1,6 +1,8 @@
 const autoBind = require("auto-bind");
-const CategoryModel = require("../models/category.model");
 const { default: mongoose } = require("mongoose");
+const createHttpError = require("http-errors");
+
+const CategoryModel = require("../models/category.model");
 
 class CategoriesService {
     #model;
@@ -49,11 +51,15 @@ class CategoriesService {
     async updateCategory({ id, name }) {
         await this.checkExistCategory(id);
         const resultUpdate = await this.#model.updateOne({ _id: id }, { $set: { name } });
-        if (!resultUpdate.modifiedCount) throw new createHttpError("بروزرسانی انجام نشد");
+        if (!resultUpdate.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
     };
 
-    async deleteCategory() {
-
+    async deleteCategory({ id }) {
+        const category = await this.checkExistCategory(id);
+        const resultDelete = await this.#model.deleteMany({
+            $or: [{ _id: category._id }, { parent: category._id }]
+        });
+        if (!resultDelete.deletedCount) throw new createHttpError.NotFound("حذف انجام نشد");
     }
 
     async getParentsCategories() {
@@ -65,7 +71,7 @@ class CategoriesService {
     };
 
     async checkExistCategory(id) {
-        const category = await this.#model.findById(id);
+        const category = await this.#model.findById(id);        
         if (!category) throw new createHttpError.NotFound("دسته بندی یافت نشد");
         return category;
     }

@@ -113,6 +113,8 @@
  *          responses:
  *              200:
  *                  description: success
+ *              404:
+ *                  description: not found
  *              500:
  *                  description: server error
  */
