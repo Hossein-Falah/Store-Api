@@ -93,12 +93,21 @@ class CategoriesController {
         }
     }
 
-    async getParentsCategories(req, res, next) {
-
-    };
-
     async getChildCategories(req, res, next) {
+        try {
+            const { id } = req.params;
 
+            await objectIdValidation.validateAsync({ id });
+            
+            const children = await this.#service.getChildCategories({ id });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                children
+            });
+        } catch (error) {
+            next(error)
+        }
     };
 };
 

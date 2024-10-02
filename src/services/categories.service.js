@@ -62,12 +62,10 @@ class CategoriesService {
         if (!resultDelete.deletedCount) throw new createHttpError.NotFound("حذف انجام نشد");
     }
 
-    async getParentsCategories() {
-
-    };
-
-    async getChildCategories() {
-
+    async getChildCategories({ id }) {
+        const children = await this.#model.find({ parent: id }, { __v: 0, parent: 0 });
+        return children;
+        
     };
 
     async checkExistCategory(id) {

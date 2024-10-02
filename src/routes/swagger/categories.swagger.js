@@ -121,19 +121,6 @@
 
 /**
  * @swagger
- *  /categories/parents:
- *      get:
- *          tags: [Category]
- *          summary: get all parents
- *          responses:
- *              200:
- *                  description: success
- *              500:
- *                  description: server error
- */
-
-/**
- * @swagger
  *  /categories/children/{id}:
  *      get:
  *          tags: [Category]
