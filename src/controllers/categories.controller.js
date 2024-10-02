@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const CategoriesService = require("../services/categories.service");
 const { StatusCodes } = require("http-status-codes");
 const { addCategoryValidation } = require("../validations/categories.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class CategoriesController {
     #service;
@@ -21,7 +22,15 @@ class CategoriesController {
     };
 
     async getCategoryById(req, res, next) {
-        
+        const { id } = req.params;
+        await objectIdValidation.validateAsync({ id });
+
+        const category = await this.#service.getCategoryById(id);
+
+        return res.status(StatusCodes.OK).json({
+            statusCode: StatusCodes.OK,
+            category
+        })
     };
 
     async createCategory(req, res, next) {

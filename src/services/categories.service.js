@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const CategoryModel = require("../models/category.model");
+const { default: mongoose } = require("mongoose");
 
 class CategoriesService {
     #model;
@@ -14,8 +15,29 @@ class CategoriesService {
         return category;
     };
 
-    async getCategoryById() {
-        
+    async getCategoryById(id) {
+        const category = await this.#model.aggregate([
+            {
+                $match: { _id: new mongoose.Types.ObjectId(id) }
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "_id",
+                    foreignField: "parent",
+                    as: "children"
+                }
+            },
+            {
+                $project: {
+                    __v: 0,
+                    "children.__v": 0,
+                    "children.parent": 0
+                }
+            }
+        ]);
+
+        return category;
     };
 
     async createCategory({ name, parent }) {        
