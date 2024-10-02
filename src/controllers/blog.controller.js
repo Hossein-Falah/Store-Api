@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const blogService = require("../services/blog.service");
+const { StatusCodes } = require("http-status-codes");
 
 class BlogController {
     #service;
@@ -10,7 +11,12 @@ class BlogController {
     };
 
     async getAllBlogs (req, res, next) {
+        const blogs = await this.#service.getAllBlogs();
 
+        return res.status(StatusCodes.OK).json({
+            statusCode : StatusCodes.OK,
+            blogs
+        })
     }
 
     async getBlogById (req, res, next) {
