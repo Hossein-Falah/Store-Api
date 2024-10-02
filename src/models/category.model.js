@@ -14,6 +14,7 @@ const CategorySchema = new Schema({
         default: null
     }
 }, {
+    id: false,
     toJSON: {
         virtuals: true
     }
@@ -24,6 +25,13 @@ CategorySchema.virtual('children', {
     localField: '_id',
     foreignField: 'parent'
 });
+
+function autoPopulate(next) {
+    this.populate([{path: "children", select: { __v: 0, id: 0 }}]);
+    next();
+}
+
+CategorySchema.pre('find', autoPopulate).pre('findOne', autoPopulate);
 
 const CategoryModel = mongoose.model("category", CategorySchema);
 

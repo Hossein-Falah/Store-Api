@@ -18,8 +18,9 @@ class CategoriesService {
         
     };
 
-    async createCategory() {
-
+    async createCategory({ name, parent }) {        
+        const category = await this.#model.create({ name, parent });
+        if (!category) throw new Error("دسته بندی ایجاد نشد");
     };
 
     async updateCategory() {
