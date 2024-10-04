@@ -1,14 +1,18 @@
 const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
+const readingTime = require('reading-time');
 
 const BlogModel = require("../models/blog.model");
+const CategoryModel = require("../models/category.model");
 
 class blogService {
     #model;
+    #categoryModel;
 
     constructor() {
         autoBind(this);
         this.#model = BlogModel;
+        this.#categoryModel = CategoryModel;
     }
 
     async getAllBlogs () {
@@ -38,6 +42,65 @@ class blogService {
         
         return blogs
     }
+
+    async getBlogById({ id }) {
+
+    };
+
+    async createBlog(req, blogData) {
+        if (!req?.body?.tags) req.body.tags = [];
+        const { title, description, content, slug, category, tags, reading_time } = blogData
+
+        const originalName = req?.file?.path?.replace(/\\/g, "/").split("/")[6];
+        const image = `/uploads/blogs/${originalName}`;
+        
+        const author = req.user._id;    
+
+        const existSlug = await this.#model.findOne({ slug: slug });
+        if (existSlug) throw new createHttpError.Conflict("نام slug تکراری است");
+
+        const existCategory = await this.#categoryModel.findById({ _id: category });
+        if (!existCategory) throw new createHttpError.NotFound("دسته بندی وجود ندارد");
+
+        const newBlog = { 
+            title,
+            description,
+            content,
+            author,
+            image,
+            slug,
+            category,
+            tags,
+            reading_time: readingTime(content.replace(/<[^>]*>/g, ''))
+        }
+
+        const blog = await this.#model.create(newBlog);
+        if (!blog) throw new createHttpError.InternalServerError("بلاگ ذخیره نشد");
+    };
+
+    async updateBlogById() {
+
+    };
+
+    async deleteBlogById() {
+
+    };
+
+    async likeBlogById() {
+
+    };
+
+    async bookmarkBlogById() {
+
+    };
+
+    async getCommentsForBlog() {
+
+    };
+
+    async createCommentForBlog() {
+
+    };
 };
 
 module.exports = new blogService();

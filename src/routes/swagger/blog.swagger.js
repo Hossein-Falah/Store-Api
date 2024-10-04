@@ -23,14 +23,11 @@
  *                      type: string
  *                      description: the content for blog
  *                  image:
- *                      type: string
+ *                      type: file
  *                      description: the image for blog
  *                  slug:
  *                      type: string
  *                      description: the slug for blog
- *                  short_link:
- *                      type: string
- *                      description: the short_link for blog
  *                  category:
  *                      type: string
  *                      description: the category for blog
@@ -119,16 +116,14 @@
  *          tags: [Blog]
  *          summary: create blog
  *          requestBody:
+ *              required: true
  *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/CreateBlog'
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/CreateBlog'
  *          responses:
- *              200:
- *                  description: success
+ *              201:
+ *                  description: blog create successfully
  *              400:
  *                  description: bad Request
  *              500:

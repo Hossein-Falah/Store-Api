@@ -5,7 +5,7 @@ const BlogSchema = new Schema({
         type: String,
         required: true,
         min: 3,
-        max: 255,
+        max: 50,
         unique: true
     },
     description: {
@@ -34,10 +34,6 @@ const BlogSchema = new Schema({
         max: 255,
         unique: true
     },
-    short_link: {
-        type: String,
-        require: true
-    },
     category: {
         type: mongoose.Types.ObjectId,
         ref: 'category',
@@ -57,22 +53,22 @@ const BlogSchema = new Schema({
         require: true
     },
     likes: {
-        type: mongoose.Types.ObjectId,
+        type: [mongoose.Types.ObjectId],
         ref: "user",
         default: []
     },
     dislikes: {
-        type: mongoose.Types.ObjectId,
+        type: [mongoose.Types.ObjectId],
         ref: "user",
         default: []
     },
     bookmarks: {
-        type: mongoose.Types.ObjectId,
+        type: [mongoose.Types.ObjectId],
         ref: "user",
         default: []
     },
     comments: {
-        type: mongoose.Types.ObjectId,
+        type: [mongoose.Types.ObjectId],
         ref: "comment",
         default: []
     }

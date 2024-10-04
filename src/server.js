@@ -33,6 +33,7 @@ class Application {
         this.#app.use(cors());
         this.#app.use(express.json())
         this.#app.use(express.urlencoded({ extended: true }));
+        this.#app.use(express.static('public'));
         this.#app.use('/api-document', swaggerUi.serve, swaggerOptions)
     }
 
