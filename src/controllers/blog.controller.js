@@ -3,6 +3,7 @@ const blogService = require("../services/blog.service");
 const { StatusCodes } = require("http-status-codes");
 const { createBlogValidation } = require("../validations/blog.validation");
 const { deleteImageFile } = require("../utils/function.utils");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class BlogController {
     #service;
@@ -27,6 +28,15 @@ class BlogController {
 
     async getBlogById (req, res, next) {
         try {
+            const { id } = req.params;
+            await objectIdValidation.validateAsync({ id });
+
+            const blog = await this.#service.getBlogById({ id });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                blog
+            })
 
         } catch (error) {
             next(error);

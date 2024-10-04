@@ -44,7 +44,12 @@ class blogService {
     }
 
     async getBlogById({ id }) {
-
+        const blog = await this.#model.findById(id).populate([
+            {path: "category", select: ['name']}, 
+            {path: "author", select: ['username', 'name', 'email', 'phone']}
+        ]);
+        if (!blog) throw new createHttpError.NotFound("بلاگی پیدا نشد");
+        return blog;
     };
 
     async createBlog(req, blogData) {
