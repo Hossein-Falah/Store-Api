@@ -29,7 +29,19 @@ class blogService {
                 $unwind: "$author"
             },
             {
+                $lookup: {
+                    from: "categories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
                 $project: {
+                    "category.__v": 0,
                     "author.password": 0,
                     "author.refreshToken": 0,
                     "author.__v": 0,
