@@ -99,8 +99,12 @@ class blogService {
 
     };
 
-    async deleteBlogById() {
+    async deleteBlogById({ id }) {
+        const blog = await this.#model.findById(id)
+        if (!blog) throw new createHttpError.NotFound("بلاگ مورد نظر یافت نشد");
 
+        const resultDelete = await this.#model.deleteOne({ _id: blog._id });
+        if (resultDelete.deletedCount == 0) throw new createHttpError.InternalServerError("حذف بلاگ انجام نشد");
     };
 
     async likeBlogById() {

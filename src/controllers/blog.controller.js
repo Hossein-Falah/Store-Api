@@ -73,7 +73,16 @@ class BlogController {
 
     async deleteBlogById (req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.deleteBlogById({ id });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "بلاگ با موفقعیت حذف شد"
+            });
         } catch (error) {
             next(error);
         }
