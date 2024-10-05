@@ -1,7 +1,7 @@
 const autoBind = require("auto-bind");
 const blogService = require("../services/blog.service");
 const { StatusCodes } = require("http-status-codes");
-const { createBlogValidation } = require("../validations/blog.validation");
+const { createBlogValidation, updateBlogValidation } = require("../validations/blog.validation");
 const { deleteImageFile } = require("../utils/function.utils");
 const { objectIdValidation } = require("../validations/id.validation");
 
@@ -64,9 +64,24 @@ class BlogController {
     }
 
     async updateBlogById (req, res, next) {
-        try {
-            
+        try {            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+            const blogData = await updateBlogValidation.validateAsync(req.body);
+
+            await this.#service.updateBlogById(req, id, blogData);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "آپدیت مقاله با موفقعیت انجام شد"
+            })
         } catch (error) {
+            if (req?.file) {
+                const originalName = req?.file?.path?.replace(/\\/g, "/").split("/")[6];
+                const imagePath = `public/uploads/blogs/${originalName}`;
+                deleteImageFile(imagePath);
+            }
             next(error);
         }
     }
@@ -108,7 +123,7 @@ class BlogController {
     async bookmarkBlogById (req, res, next) {
         try {
             const { id } = req.params;
-            
+
             await objectIdValidation.validateAsync({ id });
 
             const message = await this.#service.bookmarkBlogById(req, id);

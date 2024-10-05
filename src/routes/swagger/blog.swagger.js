@@ -47,7 +47,7 @@
  *                      type: string
  *                      description: the content for blog
  *                  image:
- *                      type: string
+ *                      type: file
  *                      description: the image for blog
  *                  slug:
  *                      type: string
@@ -133,7 +133,7 @@
 /**
  * @swagger
  *  /blogs/update/{id}:
- *      put:
+ *      patch:
  *          tags: [Blog]
  *          summary: update blog
  *          parameters:
@@ -143,10 +143,7 @@
  *                type: string
  *          requestBody:
  *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/UpdateBlog'
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/UpdateBlog'
  *          responses:

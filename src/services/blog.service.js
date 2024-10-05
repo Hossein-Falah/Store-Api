@@ -4,6 +4,7 @@ const readingTime = require('reading-time');
 
 const BlogModel = require("../models/blog.model");
 const CategoryModel = require("../models/category.model");
+const { deleteImageFile, deleteInvalidPropertyObject } = require("../utils/function.utils");
 
 class blogService {
     #model;
@@ -66,7 +67,7 @@ class blogService {
 
     async createBlog(req, blogData) {
         if (!req?.body?.tags) req.body.tags = [];
-        const { title, description, content, slug, category, tags, reading_time } = blogData
+        const { title, description, content, slug, category, tags } = blogData
 
         const originalName = req?.file?.path?.replace(/\\/g, "/").split("/")[6];
         const image = `/uploads/blogs/${originalName}`;
@@ -95,8 +96,26 @@ class blogService {
         if (!blog) throw new createHttpError.InternalServerError("بلاگ ذخیره نشد");
     };
 
-    async updateBlogById() {
+    async updateBlogById(req, id, blogData) {
+        const blog = this.checkExistBlog(id);
 
+        if (!req?.body?.tags) req.body.tags = [];
+
+        if (req?.file) {
+            const originalName = req?.file?.path?.replace(/\\/g, "/").split("/")[6];
+            const image = `/uploads/blogs/${originalName}`;
+            blogData.image = image;
+            console.log(image);
+            deleteImageFile(blog.image);
+        }
+
+        const existCategory = await this.#categoryModel.findById({ _id: blogData.category });
+        if (!existCategory) throw new createHttpError.NotFound("دسته بندی وجود ندارد");
+
+        deleteInvalidPropertyObject(blogData, ['bookmarks', 'comments', 'dislikes', 'likes', 'author']);
+        
+        const updateResult = await this.#model.updateOne({ _id: id }, { $set: blogData });
+        if (!updateResult.modifiedCount) throw new createHttpError.InternalServerError("مشکلی در آپدیت بلاگ پیش آمده مجددا تلاش کنید")
     };
 
     async deleteBlogById({ id }) {
