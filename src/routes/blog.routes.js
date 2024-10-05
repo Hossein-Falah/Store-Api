@@ -17,7 +17,7 @@ router.delete(`/delete/:id`, BlogController.deleteBlogById);
 router.get(`/:id/comment`, BlogController.getCommentsForBlog);
 router.post(`/:id/comment`, BlogController.createCommentForBlog);
 router.put(`/:id/like`, authenticateToken, BlogController.likeBlogById);
-router.put(`/:id/bookmark`, BlogController.bookmarkBlogById);
+router.put(`/:id/bookmark`, authenticateToken, BlogController.bookmarkBlogById);
 
 module.exports = {
     BlogRoutes: router

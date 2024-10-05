@@ -107,7 +107,16 @@ class BlogController {
 
     async bookmarkBlogById (req, res, next) {
         try {
+            const { id } = req.params;
             
+            await objectIdValidation.validateAsync({ id });
+
+            const message = await this.#service.bookmarkBlogById(req, id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message
+            })
         } catch (error) {
             next(error);
         }

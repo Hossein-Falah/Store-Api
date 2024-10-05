@@ -131,8 +131,18 @@ class blogService {
         return message;
     };
 
-    async bookmarkBlogById() {
+    async bookmarkBlogById(req, id) {
+        const user = req.user;
 
+        await this.checkExistBlog(id);
+
+        const bookmarkedBlog = await this.#model.findOne({ _id: id, bookmarks: user._id });
+
+        const updateQuery = bookmarkedBlog ? { $pull: { bookmarks: user._id } } : { $push: { bookmarks: user._id }};
+        await this.#model.updateOne({ _id: id }, updateQuery);
+
+        const message = bookmarkedBlog ? "مقاله از لیست علاقه مندی پاک شد" : "مقاله به لیست علاقه مندی ها اضافه شد";
+        return message;
     };
 
     async getCommentsForBlog() {
