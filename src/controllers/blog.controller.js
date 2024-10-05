@@ -136,22 +136,6 @@ class BlogController {
             next(error);
         }
     }
-
-    async getCommentsForBlog (req, res, next) {
-        try {
-            
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    async createCommentForBlog (req, res, next) {
-        try {
-            
-        } catch (error) {
-            next(error);
-        }
-    }
 };
 
 module.exports = new BlogController();
