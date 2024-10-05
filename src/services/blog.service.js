@@ -107,8 +107,28 @@ class blogService {
         if (resultDelete.deletedCount == 0) throw new createHttpError.InternalServerError("حذف بلاگ انجام نشد");
     };
 
-    async likeBlogById() {
+    async likeBlogById(req, id) {
+        const user = req.user;
 
+        await this.checkExistBlog(id);
+
+        const likedBlog = await this.#model.findOne({ _id: id, likes: user._id });
+        const disLikedBlog = await this.#model.findOne({ _id: id, dislikes: user._id });
+
+        let message;
+
+        if (likedBlog) {
+            await this.#model.updateOne({ _id: id }, { $pull: { likes: user._id }, $push: { dislikes: user._id } });
+            message = "مقاله دیس لایک شد";
+        } else if(disLikedBlog) {
+            await this.#model.updateOne({ _id: id }, { $pull: { dislikes: user._id }, $push: { likes: user._id } });
+            message = "مقاله لایک شد";
+        } else {
+            await this.#model.updateOne({ _id: id }, { $push: { likes: user._id } });
+            message = "مقاله لایک شد";
+        }
+
+        return message;
     };
 
     async bookmarkBlogById() {
@@ -122,6 +142,12 @@ class blogService {
     async createCommentForBlog() {
 
     };
+
+    async checkExistBlog(id) {
+        const blog = await this.#model.findById(id);
+        if (!blog) throw new createHttpError.NotFound("بلاگ مورد نظر یافت نشد");
+        return blog;
+    }
 };
 
 module.exports = new blogService();
