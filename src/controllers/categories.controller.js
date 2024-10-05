@@ -48,8 +48,8 @@ class CategoriesController {
     
             await this.#service.createCategory(req.body);
     
-            return res.status(StatusCodes.OK).json({
-                statusCode: StatusCodes.OK,
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
                 message: "دسته بندی با موفقیت اضافه شد"
             });
         } catch (error) {

@@ -23,14 +23,11 @@
  *                      type: string
  *                      description: the content for blog
  *                  image:
- *                      type: string
+ *                      type: file
  *                      description: the image for blog
  *                  slug:
  *                      type: string
  *                      description: the slug for blog
- *                  short_link:
- *                      type: string
- *                      description: the short_link for blog
  *                  category:
  *                      type: string
  *                      description: the category for blog
@@ -50,7 +47,7 @@
  *                      type: string
  *                      description: the content for blog
  *                  image:
- *                      type: string
+ *                      type: file
  *                      description: the image for blog
  *                  slug:
  *                      type: string
@@ -119,16 +116,14 @@
  *          tags: [Blog]
  *          summary: create blog
  *          requestBody:
+ *              required: true
  *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/CreateBlog'
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/CreateBlog'
  *          responses:
- *              200:
- *                  description: success
+ *              201:
+ *                  description: blog create successfully
  *              400:
  *                  description: bad Request
  *              500:
@@ -138,7 +133,7 @@
 /**
  * @swagger
  *  /blogs/update/{id}:
- *      put:
+ *      patch:
  *          tags: [Blog]
  *          summary: update blog
  *          parameters:
@@ -148,10 +143,7 @@
  *                type: string
  *          requestBody:
  *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/UpdateBlog'
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/UpdateBlog'
  *          responses:
@@ -214,54 +206,6 @@
  *                required: true
  *                name: id
  *                type: string
- *          responses:
- *              200:
- *                  description: success
- *              400:
- *                  description: bad Request
- *              500:
- *                  description: server error
- */
-
-/**
- * @swagger
- *  /blogs/{id}/comment:
- *      get:
- *          tags: [Blog]
- *          summary: get comments
- *          parameters:
- *              - in: path
- *                required: true
- *                name: id
- *                type: string
- *          responses:
- *              200:
- *                  description: success
- *              400:
- *                  description: bad Request
- *              500:
- *                  description: server error
- */
-
-/**
- * @swagger
- *  /blogs/{id}/comment:
- *      post:
- *          tags: [Blog]
- *          summary: create comment
- *          parameters:
- *              - in: path
- *                required: true
- *                name: id
- *                type: string
- *          requestBody:
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Comment'
- *                  application/x-www-form-urlencoded:
- *                      schema:
- *                          $ref: '#/components/schemas/Comment'
  *          responses:
  *              200:
  *                  description: success

@@ -1,17 +1,21 @@
 const { Router } = require('express');
-const { getAllBlogs, getBlogById, createBlog, updateBlogById, getCommentsForBlog, createCommentForBlog, likeBlogById, bookmarkBlogById, deleteBlogById } = require('../controllers/blog.controller');
+
+const BlogController = require('../controllers/blog.controller');
+const tags = require('../middlewares/tags.middleware');
+const { authenticateToken } = require('../middlewares/guard/authorization.guard');
+const { uploadMiddleware } = require('../middlewares/uploader.middleware');
 
 const router = Router();
 
-router.get(`/`, getAllBlogs);
-router.get(`/:id`, getBlogById);
-router.post(`/create`, createBlog);
-router.patch(`/update/:id`, updateBlogById);
-router.delete(`/delete/:id`, deleteBlogById);
-router.get(`/:id/comment`, getCommentsForBlog);
-router.post(`/:id/comment`, createCommentForBlog);
-router.put(`/:id/like`, likeBlogById);
-router.put(`/:id/bookmark`, bookmarkBlogById);
+const uploadBlog = uploadMiddleware('blogs')
+
+router.get(`/`, BlogController.getAllBlogs);
+router.get(`/:id`, BlogController.getBlogById);
+router.post(`/create`, authenticateToken, uploadBlog.single('image'), tags("tags"), BlogController.createBlog);
+router.patch(`/update/:id`, authenticateToken, uploadBlog.single('image'), tags("tags"), BlogController.updateBlogById);
+router.delete(`/delete/:id`, BlogController.deleteBlogById);
+router.put(`/:id/like`, authenticateToken, BlogController.likeBlogById);
+router.put(`/:id/bookmark`, authenticateToken, BlogController.bookmarkBlogById);
 
 module.exports = {
     BlogRoutes: router
