@@ -9,4 +9,6 @@
  *        description: category mangement route
  *      - name: Blog
  *        description: blog controll mangement route
+ *      - name: Comment
+ *        description: comment controll mangement route
  */
