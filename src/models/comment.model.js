@@ -31,7 +31,8 @@ const CommentSchema = new Schema({
     },
     reply: {
         type: mongoose.Types.ObjectId,
-        ref: "comment"
+        ref: "comment",
+        default: null
     },
     likes: {
         type: [mongoose.Types.ObjectId],
@@ -44,8 +45,25 @@ const CommentSchema = new Schema({
         default: []
     }
 }, {
-    timestamps: true
+    id: false,
+    timestamps: true,
+    toJSON: {
+        virtuals: true
+    }
 });
+
+CommentSchema.virtual('replies', {
+    ref: 'comment',
+    localField: '_id',
+    foreignField: 'reply'
+});
+
+function autoPopulate(next) {
+    this.populate([{ path: "replies", select: { __v: 0, id: 0 } }]);
+    next();
+}
+
+CommentSchema.pre('find', autoPopulate).pre('findOne', autoPopulate);
 
 const CommentModel = mongoose.model('comment', CommentSchema);
 

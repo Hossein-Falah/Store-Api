@@ -15,7 +15,7 @@ class CommentService {
     };
 
     async getAllComments() {
-        const comments = await this.#model.find({});
+        const comments = await this.#model.find({ reply: null }, { __v: 0 });
 
         return comments;
     }
