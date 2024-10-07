@@ -136,7 +136,12 @@ class CommentController {
 
     async getCommentLikes(req, res, next) {
         try {
+            const users = await this.#service.getCommentLikes();
 
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                users
+            })
         } catch (error) {
             next(error);
         }

@@ -81,7 +81,35 @@ class CommentService {
     };
 
     async getCommentLikes() {
+        const users = await this.#model.aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "likes",
+                    foreignField: "_id",
+                    as: "likes"
+                }
+            },
+            {
+                $unwind: "$likes"
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    likes: { $push: "$likes" }
+                }
+            },
+            {
+                $project: {
+                    "likes.role": 0,
+                    "likes.password": 0,
+                    "likes.refreshToken": 0,
+                    "likes.__v": 0
+                }
+            }
+        ]);
         
+        return users;
     }
 
     async likeComment(req, id) {

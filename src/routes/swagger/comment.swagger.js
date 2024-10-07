@@ -48,7 +48,7 @@
 
 /**
  * @swagger
- *  /comments/{id}:
+ *  /comments/comment/{id}:
  *      get:
  *          tags: [Comment]
  *          summary: get comment

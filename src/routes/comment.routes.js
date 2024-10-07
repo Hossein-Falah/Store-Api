@@ -5,7 +5,7 @@ const { authenticateToken } = require("../middlewares/guard/authorization.guard"
 const router = Router();
 
 router.get(`/`, CommentController.getAllComments);
-router.get(`/:id`, CommentController.getCommentById);
+router.get(`/comment/:id`, CommentController.getCommentById);
 router.post(`/create`, authenticateToken, CommentController.createComment);
 router.post(`/answer/:id`, CommentController.answerComment);
 router.put(`/accept/:id`, CommentController.acceptComment);
