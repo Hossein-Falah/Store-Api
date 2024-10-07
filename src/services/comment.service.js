@@ -13,7 +13,9 @@ class CommentService {
     };
 
     async getAllComments() {
-        
+        const comments = await this.#model.find({});
+
+        return comments;
     }
 
     async getCommentById() {

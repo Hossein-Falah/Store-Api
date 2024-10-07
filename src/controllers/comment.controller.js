@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const commentService = require("../services/comment.service");
 const { StatusCodes } = require("http-status-codes");
 const { createCommentValidation } = require("../validations/comment.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class CommentController {
     #service;
@@ -13,7 +14,12 @@ class CommentController {
 
     async getAllComments(req, res, next) {
         try {
-            
+            const comments = await this.#service.getAllComments();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                comments
+            });
         } catch (error) {
             next(error);
         }
