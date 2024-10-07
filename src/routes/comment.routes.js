@@ -11,7 +11,7 @@ router.post(`/answer/:commentID`, CommentController.answerComment);
 router.put(`/accept/:commentID`, CommentController.acceptComment);
 router.put(`/reject/:commentID`, CommentController.rejectComment);
 router.delete(`/delete/:id`, CommentController.removeComment);
-router.put(`/:id`, CommentController.updateComment);
+router.put(`/update/:id`, CommentController.updateComment);
 router.get(`/likes`, CommentController.getCommentLikes);
 router.put(`/like/:id`, CommentController.likeComment);
 

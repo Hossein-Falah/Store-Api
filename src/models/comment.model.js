@@ -8,6 +8,9 @@ const CommentSchema = new Schema({
     },
     comment: {
         type: String,
+        min: 3,
+        max: 500,
+        trim: true,
         required: true
     },
     blog: {

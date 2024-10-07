@@ -1,7 +1,7 @@
 const autoBind = require("auto-bind");
 const commentService = require("../services/comment.service");
 const { StatusCodes } = require("http-status-codes");
-const { createCommentValidation } = require("../validations/comment.validation");
+const { createCommentValidation, updateCommentValidation } = require("../validations/comment.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class CommentController {
@@ -100,7 +100,18 @@ class CommentController {
 
     async updateComment(req, res, next) {
         try {
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
             
+            const commentData = await updateCommentValidation.validateAsync(req.body);
+
+            await this.#service.updateComment(id, commentData);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "کامنت با موفقیت ویرایش شد"
+            });
         } catch (error) {
             next(error);
         }

@@ -64,8 +64,12 @@ class CommentService {
         if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف کامنت انجام نشد");
     };
 
-    async updateComment() {
+    async updateComment(id, { comment }) {
+        const checkExistComment = await this.#model.findById({ _id: id });
+        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
 
+        const resultUpdate = await this.#model.updateOne({ _id: id }, { $set: { comment } });
+        if (!resultUpdate.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
     };
 
     async getCommentLikes() {

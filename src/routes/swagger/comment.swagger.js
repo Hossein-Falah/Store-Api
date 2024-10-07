@@ -90,7 +90,7 @@
 /**
  * @swagger
  *  /comments/update/{id}:
- *      patch:
+ *      put:
  *          tags: [Comment]
  *          summary: update comment
  *          parameters:
