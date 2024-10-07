@@ -13,7 +13,7 @@ router.put(`/reject/:id`, CommentController.rejectComment);
 router.delete(`/delete/:id`, CommentController.removeComment);
 router.put(`/update/:id`, CommentController.updateComment);
 router.get(`/likes`, CommentController.getCommentLikes);
-router.put(`/like/:id`, CommentController.likeComment);
+router.put(`/like/:id`, authenticateToken, CommentController.likeComment);
 
 module.exports = {
     CommentRoutes: router

@@ -37,6 +37,11 @@ const CommentSchema = new Schema({
         type: [mongoose.Types.ObjectId],
         ref: "user",
         default: []
+    },
+    dislikes: {
+        type: [mongoose.Types.ObjectId],
+        ref: "user",
+        default: []
     }
 }, {
     timestamps: true

@@ -144,7 +144,16 @@ class CommentController {
 
     async likeComment(req, res, next) {
         try {
+            const { id } = req.params;
 
+            await objectIdValidation.validateAsync({ id });
+
+            const message = await this.#service.likeComment(req, id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message
+            });
         } catch (error) {
             next(error);
         }

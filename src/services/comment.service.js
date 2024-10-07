@@ -84,8 +84,29 @@ class CommentService {
         
     }
 
-    async likeComment() {
-        
+    async likeComment(req, id) {
+        const user = req.user;
+
+        const checkExistComment = await this.#model.findById({ _id: id });
+        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+
+        const likedBlog = await this.#model.findOne({ _id: id, likes: user._id });
+        const disLikedBlog = await this.#model.findOne({ _id: id, dislikes: user._id });
+
+        let message;
+
+        if (likedBlog) {
+            await this.#model.updateOne({ _id: id }, { $pull: { likes: user._id }, $push: { dislikes: user._id } });
+            message = "کامنت دیس لایک شد";
+        } else if(disLikedBlog) {
+            await this.#model.updateOne({ _id: id }, { $pull: { dislikes: user._id }, $push: { likes: user._id } });
+            message = "کامنت لایک شد";
+        } else {
+            await this.#model.updateOne({ _id: id }, { $push: { likes: user._id } });
+            message = "کامنت لایک شد";
+        }
+
+        return message;
     }
 };
 
