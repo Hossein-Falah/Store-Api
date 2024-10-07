@@ -47,11 +47,10 @@ class CommentService {
     async answerComment(req, id, commentData) {
         const user = req.user;
 
-        const checkExistComment = await this.#model.findById({ _id: id });
-        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+        const blog = await this.checkExistComment(id);
 
         const mainComment = await this.#model.findOneAndUpdate(
-            { _id: checkExistComment._id },
+            { _id: blog._id },
             { $set: { isAnswer: 1 }},
             { new: true }
         );
@@ -62,7 +61,7 @@ class CommentService {
             user: user._id,
             score: commentData.score,
             isAnswer: 1,
-            isAccept: 1,
+            isAccept: 0,
             reply: mainComment._id
         });
 
@@ -70,32 +69,28 @@ class CommentService {
     }
 
     async acceptComment(id) {
-        const checkExistComment = await this.#model.findById({ _id: id });
-        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+        const blog = await this.checkExistComment(id);
 
-        const resultUpdate = await this.#model.updateOne({ _id: checkExistComment._id }, { $set: { isAccept: 1 }});
+        const resultUpdate = await this.#model.updateOne({ _id: blog._id }, { $set: { isAccept: 1 }});
         if (!resultUpdate.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
     }
 
     async rejectComment(id) {
-        const checkExistComment = await this.#model.findById({ _id: id });
-        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+        const blog = await this.checkExistComment(id);
 
-        const resultUpdate = await this.#model.updateOne({ _id: checkExistComment._id }, { $set: { isAccept: 0 }});
+        const resultUpdate = await this.#model.updateOne({ _id: blog._id }, { $set: { isAccept: 0 }});
         if (!resultUpdate.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
     }
 
     async removeComment(id) {
-        const checkExistComment = await this.#model.findById({ _id: id });
-        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+        const blog = await this.checkExistComment(id);
 
-        const resultDelete = await this.#model.deleteOne({ _id: checkExistComment._id });
+        const resultDelete = await this.#model.deleteOne({ _id: blog._id });
         if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف کامنت انجام نشد");
     };
 
     async updateComment(id, { comment }) {
-        const checkExistComment = await this.#model.findById({ _id: id });
-        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+        await this.checkExistComment(id);
 
         const resultUpdate = await this.#model.updateOne({ _id: id }, { $set: { comment } });
         if (!resultUpdate.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
@@ -136,8 +131,7 @@ class CommentService {
     async likeComment(req, id) {
         const user = req.user;
 
-        const checkExistComment = await this.#model.findById({ _id: id });
-        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+        await this.checkExistComment(id);
 
         const likedBlog = await this.#model.findOne({ _id: id, likes: user._id });
         const disLikedBlog = await this.#model.findOne({ _id: id, dislikes: user._id });
@@ -156,6 +150,12 @@ class CommentService {
         }
 
         return message;
+    }
+
+    async checkExistComment(id) {
+        const blog = await this.#model.findById({ _id: id });
+        if (!blog) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+        return blog;
     }
 };
 
