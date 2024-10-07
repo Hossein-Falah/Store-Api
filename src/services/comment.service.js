@@ -44,8 +44,29 @@ class CommentService {
         if (!resultComment) throw new createHttpError.InternalServerError("خطای در ارسال نظر پیش آمده مجددا تلاش کنید");
     };
 
-    async answerComment() {
-        
+    async answerComment(req, id, commentData) {
+        const user = req.user;
+
+        const checkExistComment = await this.#model.findById({ _id: id });
+        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+
+        const mainComment = await this.#model.findOneAndUpdate(
+            { _id: checkExistComment._id },
+            { $set: { isAnswer: 1 }},
+            { new: true }
+        );
+
+        const answerToComment = await this.#model.create({
+            comment: commentData.comment,
+            blog: mainComment.blog,
+            user: user._id,
+            score: commentData.score,
+            isAnswer: 1,
+            isAccept: 1,
+            reply: mainComment._id
+        });
+
+        if (!answerToComment) throw new createHttpError.InternalServerError("خطای در ارسال نظر پیش آمده مجددا تلاش کنید");
     }
 
     async acceptComment(id) {

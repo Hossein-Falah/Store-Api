@@ -1,7 +1,7 @@
 const autoBind = require("auto-bind");
 const commentService = require("../services/comment.service");
 const { StatusCodes } = require("http-status-codes");
-const { createCommentValidation, updateCommentValidation } = require("../validations/comment.validation");
+const { createCommentValidation, updateCommentValidation, answerCommentValidation } = require("../validations/comment.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class CommentController {
@@ -59,7 +59,18 @@ class CommentController {
 
     async answerComment(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const commentData = await answerCommentValidation.validateAsync(req.body);
+
+            await this.#service.answerComment(req, id, commentData);
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "کامنت با موفقیت پاسخ داده شد"
+            });
         } catch (error) {
             next(error);
         }

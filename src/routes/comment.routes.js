@@ -7,7 +7,7 @@ const router = Router();
 router.get(`/`, CommentController.getAllComments);
 router.get(`/comment/:id`, CommentController.getCommentById);
 router.post(`/create`, authenticateToken, CommentController.createComment);
-router.post(`/answer/:id`, CommentController.answerComment);
+router.post(`/answer/:id`, authenticateToken, CommentController.answerComment);
 router.put(`/accept/:id`, CommentController.acceptComment);
 router.put(`/reject/:id`, CommentController.rejectComment);
 router.delete(`/delete/:id`, CommentController.removeComment);

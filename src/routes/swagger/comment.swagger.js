@@ -18,9 +18,6 @@
  *                  score:
  *                      type: number
  *                      description: comment score
- *                  reply:
- *                      type: string
- *                      description: comment reply
  *          UpdateComment:
  *              type: object
  *              required:
@@ -29,6 +26,18 @@
  *                  comment:
  *                      type: string
  *                      description: comment comment
+ *          AnswerComment:
+ *              type: object
+ *              required:
+ *                  -   comment
+ *                  -   score
+ *              properties:
+ *                  comment:
+ *                      type: string
+ *                      description: comment name
+ *                  score:
+ *                      type: number
+ *                      description: comment score
  */
 
 /**
@@ -170,7 +179,7 @@
 /**
  * @swagger
  *  /comments/answer/{id}:
- *      put:
+ *      post:
  *          tags: [Comment]
  *          summary: answer comment
  *          parameters:
@@ -178,6 +187,14 @@
  *                required: true
  *                name: id
  *                type: string
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/AnswerComment'
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: '#/components/schemas/AnswerComment'
  *          responses:
  *              200:
  *                  description: success
