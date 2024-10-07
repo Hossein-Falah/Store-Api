@@ -18,8 +18,9 @@ class CommentService {
         return comments;
     }
 
-    async getCommentById() {
-        
+    async getCommentById(id) {
+        const comment = await this.#model.findById({ _id: id });
+        return comment;
     }
 
     async createComment(req, commentData) {

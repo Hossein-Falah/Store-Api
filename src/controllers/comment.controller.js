@@ -27,7 +27,16 @@ class CommentController {
 
     async getCommentById(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const comment = await this.#service.getCommentById(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                comment
+            });
         } catch (error) {
             next(error);
         }
