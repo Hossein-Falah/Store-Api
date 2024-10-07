@@ -85,7 +85,14 @@ class CommentController {
 
     async rejectComment(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await this.#service.rejectComment(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "کامنت با موفقیت رد شد"
+            })
         } catch (error) {
             next(error);
         }
