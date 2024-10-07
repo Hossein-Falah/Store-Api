@@ -48,8 +48,12 @@ class CommentService {
         
     }
 
-    async acceptComment() {
-        
+    async acceptComment(id) {
+        const checkExistComment = await this.#model.findById({ _id: id });
+        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+
+        const resultUpdate = await this.#model.updateOne({ _id: checkExistComment._id }, { $set: { isAccept: 1 }});
+        if (!resultUpdate.modifiedCount) throw new createHttpError.NotFound("بروزرسانی انجام نشد");
     }
 
     async rejectComment() {

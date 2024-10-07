@@ -65,9 +65,19 @@ class CommentController {
         }
     }
 
+
     async acceptComment(req, res, next) {
         try {
+            const { id } = req.params;
             
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.acceptComment(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "کامنت با موفقیت قبول شد"
+            });
         } catch (error) {
             next(error);
         }

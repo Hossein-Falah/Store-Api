@@ -133,14 +133,14 @@
 
 /**
  * @swagger
- *  /comments/accept/{commentID}:
+ *  /comments/accept/{id}:
  *      put:
  *          tags: [Comment]
  *          summary: accept comment
  *          parameters:
  *              - in: path
  *                required: true
- *                name: commentID
+ *                name: id
  *                type: string
  *          responses:
  *              200:
@@ -151,14 +151,14 @@
 
 /**
  * @swagger
- *  /comments/reject/{commentID}:
+ *  /comments/reject/{id}:
  *      put:
  *          tags: [Comment]
  *          summary: reject comment
  *          parameters:
  *              - in: path
  *                required: true
- *                name: commentID
+ *                name: id
  *                type: string
  *          responses:
  *              200:
@@ -169,14 +169,14 @@
 
 /**
  * @swagger
- *  /comments/answer/{commentID}:
+ *  /comments/answer/{id}:
  *      put:
  *          tags: [Comment]
  *          summary: answer comment
  *          parameters:
  *              - in: path
  *                required: true
- *                name: commentID
+ *                name: id
  *                type: string
  *          responses:
  *              200:
@@ -200,14 +200,14 @@
 
 /**
  * @swagger
- *  /comments/like/{commentID}:
+ *  /comments/like/{id}:
  *      put:
  *          tags: [Comment]
  *          summary: like comment
  *          parameters:
  *              - in: path
  *                required: true
- *                name: commentID
+ *                name: id
  *                type: string
  *          responses:
  *              200:
