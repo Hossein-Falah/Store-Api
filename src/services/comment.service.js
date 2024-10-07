@@ -1,4 +1,6 @@
 const autoBind = require("auto-bind");
+const createHttpError = require('http-errors');
+
 const CommentModel = require("../models/comment.model");
 const BlogModel = require("../models/blog.model");
 
@@ -54,9 +56,13 @@ class CommentService {
         
     }
 
-    async removeComment() {
-        
-    }
+    async removeComment(id) {
+        const checkExistComment = await this.#model.findById({ _id: id });
+        if (!checkExistComment) throw new createHttpError.NotFound("کامنت مورد نظر یافت نشد");
+
+        const resultDelete = await this.#model.deleteOne({ _id: checkExistComment._id });
+        if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف کامنت انجام نشد");
+    };
 
     async updateComment() {
 

@@ -83,7 +83,16 @@ class CommentController {
 
     async removeComment(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.removeComment(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "کامنت با موفقیت حذف شد"
+            });
         } catch (error) {
             next(error);
         }
