@@ -1,11 +1,12 @@
 const { Router } = require("express");
 const CommentController = require("../controllers/comment.controller");
+const { authenticateToken } = require("../middlewares/guard/authorization.guard");
 
 const router = Router();
 
 router.get(`/`, CommentController.getAllComments);
 router.get(`/:id`, CommentController.getCommentById);
-router.post(`/create`, CommentController.createComment);
+router.post(`/create`, authenticateToken, CommentController.createComment);
 router.post(`/answer/:commentID`, CommentController.answerComment);
 router.put(`/accept/:commentID`, CommentController.acceptComment);
 router.put(`/reject/:commentID`, CommentController.rejectComment);

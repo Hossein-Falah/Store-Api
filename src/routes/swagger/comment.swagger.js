@@ -7,7 +7,7 @@
  *              required:
  *                  -   comment
  *                  -   blog
- *                  -   user
+ *                  -   score
  *              properties:
  *                  comment:
  *                      type: string
@@ -15,9 +15,6 @@
  *                  blog:
  *                      type: string
  *                      description: comment blog
- *                  user:
- *                      type: string
- *                      description: comment user
  *                  score:
  *                      type: number
  *                      description: comment score
@@ -27,11 +24,11 @@
  *          UpdateComment:
  *              type: object
  *              required:
- *                  -   name
+ *                  -   comment
  *              properties:
- *                  name:
+ *                  comment:
  *                      type: string
- *                      description: comment name
+ *                      description: comment comment
  */
 
 /**
