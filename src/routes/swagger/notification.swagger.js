@@ -221,6 +221,36 @@
 
 /**
  * @swagger
+ *  /notifications/seen:
+ *      get:
+ *          tags: [Notification]
+ *          summary: get seen notifications
+ *          responses:
+ *              200:
+ *                  description: success
+ *              400:
+ *                  description: bad Request
+ *              500:
+ *                  description: server error
+ */
+
+/**
+ * @swagger
+ *  /notifications/unseen:
+ *      get:
+ *          tags: [Notification]
+ *          summary: get unseen notifications
+ *          responses:
+ *              200:
+ *                  description: success
+ *              400:
+ *                  description: bad Request
+ *              500:
+ *                  description: server error
+ */
+
+/**
+ * @swagger
  *  /notifications/count:
  *      get:
  *          tags: [Notification]

@@ -5,6 +5,8 @@ const router = Router();
 
 router.get(`/`, NotificationController.getNotifications);
 router.get(`/count`, NotificationController.getCountNotifications);
+router.get(`/unseen`, NotificationController.getUnSeenNotifications);
+router.get(`/seen`, NotificationController.getSeenNotifications);
 router.get(`/:id`, NotificationController.getNotificationById);
 router.post(`/send`, NotificationController.sendNotifications);
 router.delete(`/delete/:id`, NotificationController.deleteNotificationById);

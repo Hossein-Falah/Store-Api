@@ -175,6 +175,32 @@ class NotificationController {
             next(error);
         }
     }
+
+    async getUnSeenNotifications(req, res, next) {
+        try {
+            const notifications = await this.#service.getUnSeenNotifications();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                notifications
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getSeenNotifications(req, res, next) {
+        try {
+            const notifications = this.#service.getSeenNotifications();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                notifications
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
 };
 
 module.exports = new NotificationController();

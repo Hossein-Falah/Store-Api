@@ -168,6 +168,16 @@ class NotificationService {
         return count
     }
 
+    async getUnSeenNotifications() {
+        const notifications = await this.#model.find({ seen: 0 });
+        return notifications
+    }
+
+    async getSeenNotifications() {
+        const notifications = await this.#model.find({ seen: 1 });
+        return notifications
+    }
+
     async checkExistNotification(id) {
         const notification = await this.#model.findById({ _id: id });
         if (!notification) throw new createHttpError.NotFound("اعلان مورد نظر یافت نشد");
