@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const notificationService = require("../services/notification.service");
 const { sendNotificationValidation } = require("../validations/notification.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class NotificationController {
     #service;
@@ -45,7 +46,16 @@ class NotificationController {
 
     async deleteNotificationById(req, res, next) {
         try {
-            
+            const { id } = req.params;            
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.deleteNotificationById(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "اعلان با موفقیت حذف شد"
+            });
         } catch (error) {
             next(error);
         }

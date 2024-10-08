@@ -24,8 +24,11 @@ class NotificationService {
         if (!notification) throw new createHttpError.InternalServerError("خطای سرور");
     }
 
-    async deleteNotificationById() {
+    async deleteNotificationById(id) {        
+        await this.checkExistNotification(id);
         
+        const resultNotification = await this.#model.deleteOne({ _id: id });
+        if (!resultNotification.deletedCount) throw new createHttpError.InternalServerError("حذف انجام نشد");
     }
 
     async deleteAllNotifications() {
@@ -50,6 +53,12 @@ class NotificationService {
 
     async getCountNotifications() {
         
+    }
+
+    async checkExistNotification(id) {
+        const notification = await this.#model.findById({ _id: id });
+        if (!notification) throw new createHttpError.NotFound("اعلان مورد نظر یافت نشد");
+        return notification;
     }
 };
 
