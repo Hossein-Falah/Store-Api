@@ -95,7 +95,18 @@ class NotificationController {
 
     async answerNotificationById(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const { message } = await notificationValidation.validateAsync(req.body);
+
+            await this.#service.answerNotificationById(id, { message });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "اعلان با موفقیت پاسخ داده شد"
+            })
         } catch (error) {
             next(error);
         }

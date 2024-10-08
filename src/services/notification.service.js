@@ -41,8 +41,16 @@ class NotificationService {
         if (!resultNotification) throw new createHttpError.InternalServerError("بروزرسانی انجام نشد");
     }
 
-    async answerNotificationById() {
-        
+    async answerNotificationById(id, { message }) {
+        const notification = await this.checkExistNotification(id);
+
+        const resultAnswer = await this.#model.create({ 
+            admin: notification._id,
+            answer: notification._id,
+            message
+        });
+
+        if (!resultAnswer) throw new createHttpError.InternalServerError("پاسخ انجام نشد");
     }
 
     async seenNotificationById({ id }) {

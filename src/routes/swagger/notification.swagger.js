@@ -27,11 +27,8 @@
  *          AnswerNotification:
  *              type: object
  *              required:
- *                  -   answer
+ *                  -   message
  *              properties:
- *                  answer:
- *                      type: string
- *                      description: notification answer
  *                  message:
  *                      type: string
  *                      description: notification message
