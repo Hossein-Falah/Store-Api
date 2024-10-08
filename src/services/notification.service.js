@@ -45,8 +45,11 @@ class NotificationService {
         
     }
 
-    async seenNotificationById() {
-        
+    async seenNotificationById({ id }) {
+        await this.checkExistNotification(id);
+
+        const resultNotification = await this.#model.updateOne({ _id: id }, { $set: { seen: 1 } });
+        if (!resultNotification.modifiedCount) throw new createHttpError.InternalServerError("خطای سرور");
     };
 
     async seenAllNotifications() {

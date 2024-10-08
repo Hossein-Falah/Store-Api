@@ -103,7 +103,16 @@ class NotificationController {
 
     async seenNotificationById(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.seenNotificationById({ id });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "اعلان با موفقیت خوانده شد"
+            });
         } catch (error) {
             next(error);
         }
