@@ -63,7 +63,12 @@ class NotificationController {
 
     async deleteAllNotifications(req, res, next) {
         try {
-            
+            await this.#service.deleteAllNotifications();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "همه اعلان ها با موفقیت حذف شدند"
+            });
         } catch (error) {
             next(error);
         }

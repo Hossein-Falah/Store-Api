@@ -32,7 +32,8 @@ class NotificationService {
     }
 
     async deleteAllNotifications() {
-        
+        const resultNotification = await this.#model.deleteMany({});
+        if (!resultNotification.deletedCount) throw new createHttpError.InternalServerError("حذف انجام نشد");
     }
 
     async updateNotificationById() {
