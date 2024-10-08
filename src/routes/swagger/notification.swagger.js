@@ -224,7 +224,7 @@
 
 /**
  * @swagger
- *  /count:
+ *  /notifications/count:
  *      get:
  *          tags: [Notification]
  *          summary: get notification count

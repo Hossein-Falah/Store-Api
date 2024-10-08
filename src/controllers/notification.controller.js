@@ -133,7 +133,12 @@ class NotificationController {
 
     async getCountNotifications(req, res, next) {
         try {
-            
+            const count = await this.#service.getCountNotifications();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                count
+            })
         } catch (error) {
             next(error);
         }

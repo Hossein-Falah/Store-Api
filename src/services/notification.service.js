@@ -58,7 +58,8 @@ class NotificationService {
     }
 
     async getCountNotifications() {
-        
+        const count = await this.#model.find({}).countDocuments();
+        return count
     }
 
     async checkExistNotification(id) {
