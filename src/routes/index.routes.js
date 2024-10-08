@@ -13,7 +13,7 @@ router.use('/user', UserRoutes);
 router.use('/categories', CategoriesRoutes);
 router.use('/blogs', BlogRoutes);
 router.use(`/comments`, CommentRoutes);
-router.use(`/notification`, NotificationRoutes);
+router.use(`/notifications`, NotificationRoutes);
 
 module.exports = {
     AllRoutes: router

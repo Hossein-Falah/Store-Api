@@ -1,4 +1,5 @@
 const autoBind = require("auto-bind");
+const createHttpError = require('http-errors');
 
 const NotificationModel = require("../models/notification.model");
 
@@ -18,8 +19,9 @@ class NotificationService {
         
     };
 
-    async seedNotifications() {
-        
+    async sendNotifications({ message, admin }) {
+        const notification = await this.#model.create({ message, admin });
+        if (!notification) throw new createHttpError.InternalServerError("خطای سرور");
     }
 
     async deleteNotificationById() {

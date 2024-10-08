@@ -1,5 +1,8 @@
 const autoBind = require("auto-bind");
+const { StatusCodes } = require("http-status-codes");
+
 const notificationService = require("../services/notification.service");
+const { sendNotificationValidation } = require("../validations/notification.validation");
 
 class NotificationController {
     #service;
@@ -27,7 +30,14 @@ class NotificationController {
 
     async sendNotifications(req, res, next) {
         try {
-            
+            const { message, admin } = await sendNotificationValidation.validateAsync(req.body);
+
+            await this.#service.sendNotifications({ message, admin });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "اعلان با موفقیت ارسال شد"
+            });
         } catch (error) {
             next(error);
         }
