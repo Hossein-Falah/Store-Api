@@ -15,7 +15,12 @@ class NotificationController {
 
     async getNotifications(req, res, next) {
         try {
+            const notifications = await this.#service.getNotifications();
 
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                notifications
+            })
         } catch (error) {
             next(error)
         }

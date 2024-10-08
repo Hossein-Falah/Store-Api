@@ -12,11 +12,57 @@ class NotificationService {
     };
 
     async getNotifications() {
-        
+        const notifications = await this.#model.aggregate([
+            {
+                $lookup: {
+                    from: "notifications",
+                    localField: "answer",
+                    foreignField: "_id",
+                    as: "answerNotification"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$answerNotification",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "admin",
+                    foreignField: "_id",
+                    as: "admin"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$admin",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    "admin.name": 1,
+                    "admin.username": 1,
+                    "admin.email": 1,
+                    "admin.phone": 1,
+                    message: 1,
+                    seen: 1,
+                    createdAt: 1,
+                    answerNotification: {
+                        _id: 1,
+                        message: 1,
+                    },
+                },
+            },
+        ]);
+
+        return notifications;
     };
 
     async getNotificationById() {
-        
+
     };
 
     async sendNotifications({ message, admin }) {
@@ -24,9 +70,9 @@ class NotificationService {
         if (!notification) throw new createHttpError.InternalServerError("خطای سرور");
     }
 
-    async deleteNotificationById(id) {        
+    async deleteNotificationById(id) {
         await this.checkExistNotification(id);
-        
+
         const resultNotification = await this.#model.deleteOne({ _id: id });
         if (!resultNotification.deletedCount) throw new createHttpError.InternalServerError("حذف انجام نشد");
     }
@@ -37,14 +83,14 @@ class NotificationService {
     }
 
     async updateNotificationById(id, { message, admin }) {
-        const resultNotification = await this.#model.findOneAndUpdate({ _id: id }, { $set: { message, admin }});
+        const resultNotification = await this.#model.findOneAndUpdate({ _id: id }, { $set: { message, admin } });
         if (!resultNotification) throw new createHttpError.InternalServerError("بروزرسانی انجام نشد");
     }
 
     async answerNotificationById(id, { message }) {
         const notification = await this.checkExistNotification(id);
 
-        const resultAnswer = await this.#model.create({ 
+        const resultAnswer = await this.#model.create({
             admin: notification._id,
             answer: notification._id,
             message
