@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const createHttpError = require('http-errors');
 
 const NotificationModel = require("../models/notification.model");
+const { default: mongoose } = require("mongoose");
 
 class NotificationService {
     #model;
@@ -61,8 +62,59 @@ class NotificationService {
         return notifications;
     };
 
-    async getNotificationById() {
+    async getNotificationById(id) {
+        const notification = await this.#model.aggregate([
+            { 
+                $match: { _id: new mongoose.Types.ObjectId(id) }
+            },
+            {
+                $lookup: {
+                    from: "notifications",
+                    localField: "answer",
+                    foreignField: "_id",
+                    as: "answerNotification"
+                },
+            },
+            {
+                $unwind: {
+                    path: "$answerNotification",
+                    preserveNullAndEmptyArrays: true
+                },
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "admin",
+                    foreignField: "_id",
+                    as: "admin"
+                },
+            },
+            {
+                $unwind: {
+                    path: "$admin",
+                    preserveNullAndEmptyArrays: true
+                },
+            },
+            {
+                $project: {
+                    "admin.name": 1,
+                    "admin.username": 1,
+                    "admin.email": 1,
+                    "admin.phone": 1,
+                    message: 1,
+                    seen: 1,
+                    createdAt: 1,
+                    answerNotification: {
+                        _id: 1,
+                        message: 1,
+                    },
+                }
+            }
+        ]);
 
+        if (!notification.length) throw new createHttpError.NotFound("اطلاعاتی برای نمایش وجود ندارد");
+
+        return notification[0];
     };
 
     async sendNotifications({ message, admin }) {

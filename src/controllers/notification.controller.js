@@ -17,6 +17,13 @@ class NotificationController {
         try {
             const notifications = await this.#service.getNotifications();
 
+            if (!notifications.length) {
+                return res.status(StatusCodes.OK).json({
+                    statusCode: StatusCodes.OK,
+                    message: "هیچ اعلانی وجود ندارد"
+                })
+            }
+
             return res.status(StatusCodes.OK).json({
                 statusCode: StatusCodes.OK,
                 notifications
@@ -28,7 +35,16 @@ class NotificationController {
 
     async getNotificationById(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const notification = await this.#service.getNotificationById(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                notification
+            })
         } catch (error) {
             next(error)
         }
