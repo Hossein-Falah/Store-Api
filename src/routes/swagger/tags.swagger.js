@@ -11,4 +11,6 @@
  *        description: blog controll mangement route
  *      - name: Comment
  *        description: comment controll mangement route
+ *      - name: Notification
+ *        description: notification controll mangement route
  */
