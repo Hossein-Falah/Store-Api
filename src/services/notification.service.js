@@ -36,8 +36,9 @@ class NotificationService {
         if (!resultNotification.deletedCount) throw new createHttpError.InternalServerError("حذف انجام نشد");
     }
 
-    async updateNotificationById() {
-        
+    async updateNotificationById(id, { message, admin }) {
+        const resultNotification = await this.#model.findOneAndUpdate({ _id: id }, { $set: { message, admin }});
+        if (!resultNotification) throw new createHttpError.InternalServerError("بروزرسانی انجام نشد");
     }
 
     async answerNotificationById() {

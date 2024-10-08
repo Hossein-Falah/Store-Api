@@ -21,6 +21,9 @@
  *                  message:
  *                      type: string
  *                      description: notification message
+ *                  admin:
+ *                      type: string
+ *                      description: notification admin
  *          AnswerNotification:
  *              type: object
  *              required:

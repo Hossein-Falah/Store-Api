@@ -2,7 +2,7 @@ const autoBind = require("auto-bind");
 const { StatusCodes } = require("http-status-codes");
 
 const notificationService = require("../services/notification.service");
-const { sendNotificationValidation } = require("../validations/notification.validation");
+const { notificationValidation } = require("../validations/notification.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class NotificationController {
@@ -31,7 +31,7 @@ class NotificationController {
 
     async sendNotifications(req, res, next) {
         try {
-            const { message, admin } = await sendNotificationValidation.validateAsync(req.body);
+            const { message, admin } = await notificationValidation.validateAsync(req.body);
 
             await this.#service.sendNotifications({ message, admin });
 
@@ -76,7 +76,18 @@ class NotificationController {
 
     async updateNotificationById(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const { message, admin } = await notificationValidation.validateAsync(req.body);
+
+            await this.#service.updateNotificationById(id, { message, admin });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "اعلان با موفقیت ویرایش شد"
+            });
         } catch (error) {
             next(error);
         }
