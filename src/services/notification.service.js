@@ -53,7 +53,8 @@ class NotificationService {
     };
 
     async seenAllNotifications() {
-        
+        const resultNotification = await this.#model.updateMany({}, { $set: { seen: 1 } });
+        if (!resultNotification.modifiedCount) throw new createHttpError.InternalServerError("خطای سرور");
     }
 
     async getCountNotifications() {

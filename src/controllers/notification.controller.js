@@ -120,7 +120,12 @@ class NotificationController {
 
     async seenAllNotifications(req, res, next) {
         try {
-            
+            await this.#service.seenAllNotifications();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "همه اعلان ها با موفقیت خوانده شدند"
+            })
         } catch (error) {
             next(error);
         }
