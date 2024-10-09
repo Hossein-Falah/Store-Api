@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const contactService = require("../services/contact.service");
 const { contactValidation } = require("../validations/contact.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class ContactController {
     #service;
@@ -42,7 +43,16 @@ class ContactController {
 
     async getMessage(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const message = await this.#service.getMessage(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message
+            })
         } catch (error) {
             next(error);
         }

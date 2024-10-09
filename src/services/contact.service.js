@@ -20,7 +20,9 @@ class ContactService {
         return messages;
     };
 
-    async getMessage() {
+    async getMessage(id) {
+        const message = await this.#model.findOne({ _id: id });
+        return message;
     };
 
     async UpdateMessage() {
