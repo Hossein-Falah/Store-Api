@@ -13,4 +13,6 @@
  *        description: comment controll mangement route
  *      - name: Notification
  *        description: notification controll mangement route
+ *      - name: Contact
+ *        description: contact controll mangement route
  */
