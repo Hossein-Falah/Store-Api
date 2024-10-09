@@ -29,7 +29,12 @@ class ContactController {
 
     async getMessages(req, res, next) {
         try {
-            
+            const messages = await this.#service.getMessages();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                messages
+            })
         } catch (error) {
             next(error);
         }

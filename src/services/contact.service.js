@@ -16,6 +16,8 @@ class ContactService {
     };
 
     async getMessages() {
+        const messages = await this.#model.find({});
+        return messages;
     };
 
     async getMessage() {
