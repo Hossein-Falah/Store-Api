@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const ContactModel = require("../models/contact.model");
+const createHttpError = require("http-errors");
 
 class ContactService {
     #model;
@@ -9,7 +10,9 @@ class ContactService {
         this.#model = ContactModel;
     };
 
-    async sendMessage() {
+    async sendMessage({ name, email, phone, message }) {
+        const contact = await this.#model.create({ name, email, phone, message, answer: 0 });
+        if (!contact) throw new createHttpError.InternalServerError("ارسال پیام انجام نشد");
     };
 
     async getMessages() {
