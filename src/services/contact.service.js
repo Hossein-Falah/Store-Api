@@ -28,7 +28,9 @@ class ContactService {
     async UpdateMessage() {
     };
 
-    async deleteMessage() {
+    async deleteMessage(id) {
+        const resultDelete = await this.#model.findOneAndDelete({ _id: id });
+        if (!resultDelete) throw new createHttpError.NotFound("پیغام مورد نظر یافت نشد");
     };
 
     async answerMessage() {
