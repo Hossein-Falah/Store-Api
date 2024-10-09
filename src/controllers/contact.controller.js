@@ -2,7 +2,7 @@ const autoBind = require("auto-bind");
 const { StatusCodes } = require("http-status-codes");
 
 const contactService = require("../services/contact.service");
-const { contactValidation } = require("../validations/contact.validation");
+const { contactValidation, answerValidation } = require("../validations/contact.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class ContactController {
@@ -96,7 +96,18 @@ class ContactController {
 
     async answerMessage(req, res, next) {
         try {
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
             
+            const { answer, subject } = await answerValidation.validateAsync(req.body);
+
+            await this.#service.answerMessage(id, { answer, subject });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "پیام با موفقیت ارسال شد"  
+            })
         } catch (error) {
             next(error);
         }

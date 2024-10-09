@@ -8,6 +8,12 @@ const contactValidation = Joi.object({
     message: Joi.string().required("پیام نمی تواند خالی باشد").error(createHttpError.BadRequest("پیام نمی تواند خالی باشد")),
 });
 
+const answerValidation = Joi.object({
+    subject: Joi.string().required("موضوع نمی تواند خالی باشد").error(createHttpError.BadRequest("موضوع نمی تواند خالی باشد")),
+    answer: Joi.string().required("پیام نمی تواند خالی باشد").error(createHttpError.BadRequest("پیام نمی تواند خالی باشد"))  
+})
+
 module.exports = {
-    contactValidation
+    contactValidation,
+    answerValidation
 }

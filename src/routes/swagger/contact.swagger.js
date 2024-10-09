@@ -26,14 +26,14 @@
  *              type: object
  *              required:
  *                  -   subject
- *                  -   message
+ *                  -   answer
  *              properties:
  *                  subject:
  *                      type: string
  *                      description: subject of the contact
- *                  message:
+ *                  answer:
  *                      type: string
- *                      description: message of the contact
+ *                      description: answer of the contact
  */
 
 /**
@@ -146,7 +146,7 @@
 
 /**
  * @swagger
- *  /contact/answer:
+ *  /contact/answer/{id}:
  *      post:
  *          tags: [Contact]
  *          summary: answer contact

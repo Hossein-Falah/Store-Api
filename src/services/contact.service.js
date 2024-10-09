@@ -1,6 +1,9 @@
 const autoBind = require("auto-bind");
-const ContactModel = require("../models/contact.model");
 const createHttpError = require("http-errors");
+const nodemailer = require('nodemailer');
+const { promisify } = require('util')
+
+const ContactModel = require("../models/contact.model");
 
 class ContactService {
     #model;
@@ -36,7 +39,39 @@ class ContactService {
         if (!resultDelete) throw new createHttpError.NotFound("پیغام مورد نظر یافت نشد");
     };
 
-    async answerMessage() {
+    async answerMessage(id, { answer, subject }) {
+        const contact = await this.#model.findOne({ _id: id });
+        if (!contact) throw new createHttpError.NotFound("پیغام مورد نظر یافت نشد");
+        // send email
+
+        const transport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        });
+
+        console.log(process.env.EMAIL);
+        console.log(process.env.EMAIL_PASSWORD);
+        
+        const emailOption = {
+            from: process.env.EMAIL,
+            to: contact.email,
+            subject,
+            text: answer
+        };
+
+        // convert sendMail to Promise
+        const sendMail = promisify(transport.sendMail).bind(transport);
+
+        try {
+            await sendMail(emailOption);
+            await this.#model.findOneAndUpdate({ _id: id }, { answer: 1 });
+        } catch (error) {
+            console.error("Error sending email:", error);
+            throw new createHttpError.InternalServerError("ارسال پیام انجام نشد");
+        }
     };
 }
 
