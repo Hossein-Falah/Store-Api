@@ -22,10 +22,13 @@ class ContactService {
 
     async getMessage(id) {
         const message = await this.#model.findOne({ _id: id });
+        if (!message) throw new createHttpError.NotFound("پیغام مورد نظر یافت نشد");
         return message;
     };
 
-    async UpdateMessage() {
+    async UpdateMessage(id, { name, email, phone, message }) {
+        const resultUpdate = await this.#model.findOneAndUpdate({ _id: id }, { $set: { name, email, phone, message } });
+        if (!resultUpdate) throw new createHttpError.NotFound("پیغام مورد نظر یافت نشد");
     };
 
     async deleteMessage(id) {

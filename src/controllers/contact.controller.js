@@ -60,7 +60,18 @@ class ContactController {
 
     async UpdateMessage(req, res, next) {
         try {
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
             
+            const { name, email, phone, message } = await contactValidation.validateAsync(req.body);
+            
+            await this.#service.UpdateMessage(id, { name, email, phone, message });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "پیام با موفقیت ویرایش شد"
+            })
         } catch (error) {
             next(error);
         }
