@@ -83,6 +83,14 @@
  *                required: true
  *                name: id
  *                type: string
+ *          requestBody:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Menu'
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Menu'
  *          responses:
  *              200:
  *                  description: update menu

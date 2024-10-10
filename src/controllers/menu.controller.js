@@ -38,7 +38,18 @@ class MenuController {
 
     async updateMenu(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const menuData = await menuValidation.validateAsync(req.body);
+
+            await this.#service.updateMenu(id, menuData);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "دسته بندی با موفقیت ویرایش شد"
+            })
         } catch (error) {
             next(error);
         }

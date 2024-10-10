@@ -24,8 +24,13 @@ class MenuService {
         if (!newMenu) throw new createHttpError.InternalServerError("دسته بندی ایجاد نشد");
     }
 
-    async updateMenu() {
-        
+    async updateMenu(id, { title, slug, parent }) {
+        await this.checkExistById({ id });
+        await this.checkExistWithTitle({ title });
+        await this.checkExistSlug({ slug });
+
+        const resultUpdate = await this.#model.updateOne({ _id: id }, { $set: { title, slug, parent } });
+        if (!resultUpdate.modifiedCount) throw new createHttpError.InternalServerError("بروزرسانی دسته بندی انجام نشد");
     }
 
     async deleteMenu(id) {
