@@ -1,5 +1,7 @@
 const autoBind = require("auto-bind");
 const newsletterService = require("../services/newsletter.service");
+const { newsLetterValidation } = require("../validations/newsletter.validation");
+const { StatusCodes } = require("http-status-codes");
 
 class NewsLetterController {
     #service;
@@ -27,7 +29,15 @@ class NewsLetterController {
 
     async subscribe(req, res, next) {
         try {
+            const { email } = await newsLetterValidation.validateAsync(req.body);
             
+
+            const message = await this.#service.subscribe({ email });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message
+            })
         } catch (error) {
             next(error);
         }
