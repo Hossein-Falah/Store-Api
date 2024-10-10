@@ -76,14 +76,6 @@ class MenuController {
             next(error);
         }
     }
-
-    async getMenusForAdmin(req, res, next) {
-        try {
-            
-        } catch (error) {
-            next(error);
-        }
-    }
 };
 
 module.exports = new MenuController();

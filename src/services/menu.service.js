@@ -42,10 +42,6 @@ class MenuService {
         if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف دسته بندی انجام نشد");
     }
 
-    async getMenusForAdmin() {
-        
-    };
-
     async checkExistById({ id }) {
         const menu = await this.#model.findById({ _id: id });
         if (!menu) throw new createHttpError.NotFound("دسته بندی وجود ندارد");

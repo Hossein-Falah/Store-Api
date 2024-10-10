@@ -36,21 +36,6 @@
 
 /**
  * @swagger
- *  /menu/all:
- *      get:
- *          tags: [Menu]
- *          summary: get all menu
- *          responses:
- *              200:
- *                  description: get all menu
- *              400:
- *                  description: bad Request
- *              500:
- *                  description: server error
- */
-
-/**
- * @swagger
  *  /menu/create:
  *      post:
  *          tags: [Menu]
