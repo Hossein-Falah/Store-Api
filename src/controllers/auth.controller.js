@@ -69,12 +69,11 @@ class AuthController {
 
             await forgetPasswordValidation.validateAsync({ email });
 
-            const user = await this.#service.forgetPassword({ email });
+            await this.#service.forgetPassword({ email });
 
             return res.status(StatusCodes.OK).json({
                 statusCode : StatusCodes.OK,
                 message: "لینک بازیابی پسورد به ایمیل شما ارسال شد",
-                data: user
             })
         } catch (error) {
             next(error);
