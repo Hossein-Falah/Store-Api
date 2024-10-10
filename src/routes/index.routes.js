@@ -7,6 +7,7 @@ const { CommentRoutes } = require("./comment.routes");
 const { NotificationRoutes } = require("./notification.routes");
 const { ContactRoutes } = require("./contact.routes");
 const { NewsLetterRoutes } = require("./newsletter.routes");
+const { MenuRoutes } = require("./menu.routes");
 
 const router = Router();
 
@@ -17,7 +18,8 @@ router.use('/blogs', BlogRoutes);
 router.use(`/comments`, CommentRoutes);
 router.use(`/notifications`, NotificationRoutes);
 router.use(`/contact`, ContactRoutes);
-router.use(`/newsletter`, NewsLetterRoutes)
+router.use(`/newsletter`, NewsLetterRoutes);
+router.use(`/menu`, MenuRoutes);
 
 module.exports = {
     AllRoutes: router

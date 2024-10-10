@@ -17,4 +17,5 @@
  *        description: contact controll mangement route
  *      - name: NewsLetter
  *        description: newsletter controll mangement route
+ *      - name: Menu
  */
