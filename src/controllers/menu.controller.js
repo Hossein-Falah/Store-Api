@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const menuService = require("../services/menu.service");
 const { menuValidation } = require("../validations/menu.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class MenuController {
     #service;
@@ -45,7 +46,16 @@ class MenuController {
 
     async deleteMenu(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.deleteMenu(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "دسته بندی با موفقیت حذف شد"
+            });
         } catch (error) {
             next(error);
         }

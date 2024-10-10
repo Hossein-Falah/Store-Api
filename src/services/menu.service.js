@@ -28,13 +28,23 @@ class MenuService {
         
     }
 
-    async deleteMenu() {
-        
+    async deleteMenu(id) {
+        const menu = await this.checkExistById({ id });
+
+        const resultDelete = await this.#model.deleteOne({ _id: menu._id });
+
+        if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف دسته بندی انجام نشد");
     }
 
     async getMenusForAdmin() {
         
     };
+
+    async checkExistById({ id }) {
+        const menu = await this.#model.findById({ _id: id });
+        if (!menu) throw new createHttpError.NotFound("دسته بندی وجود ندارد");
+        return menu;
+    }
 
     async checkExistWithTitle({ title }) {
         const existTitle = await this.#model.findOne({ title: title });
