@@ -13,7 +13,12 @@ class NewsLetterController {
 
     async getNewsLetters(req, res, next) {
         try {
-            
+            const users = await this.#service.getNewsLetters();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                users
+            })
         } catch (error) {
             next(error);
         }

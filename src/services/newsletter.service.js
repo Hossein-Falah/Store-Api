@@ -11,7 +11,8 @@ class NewsLetterService {
     };
 
     async getNewsLetters() {
-        
+        const users = await this.#model.find();
+        return users;
     };
 
     async getNewsLetter() {
