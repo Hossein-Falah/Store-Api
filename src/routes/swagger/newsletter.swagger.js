@@ -10,6 +10,18 @@
  *                  email:
  *                      type: string
  *                      description: email of the newsletter
+ *          sendNewsletter:
+ *              type: object
+ *              required:
+ *                  - subject
+ *                  - message
+ *              properties:
+ *                  subject:
+ *                      type: string
+ *                      description: subject of the newsletter
+ *                  message:
+ *                      type: string
+ *                      description: message of the newsletter
  */
 
 /**
@@ -101,6 +113,15 @@
  *      post:
  *          summary: send newsletter
  *          tags: [NewsLetter]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/sendNewsletter'
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: '#/components/schemas/sendNewsletter'
  *          responses:
  *              201:
  *                  description: send newsletter

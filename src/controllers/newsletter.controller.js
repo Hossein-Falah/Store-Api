@@ -1,6 +1,6 @@
 const autoBind = require("auto-bind");
 const newsletterService = require("../services/newsletter.service");
-const { newsLetterValidation } = require("../validations/newsletter.validation");
+const { newsLetterValidation, sendNewsLetterValidation } = require("../validations/newsletter.validation");
 const { StatusCodes } = require("http-status-codes");
 const { objectIdValidation } = require("../validations/id.validation");
 
@@ -74,7 +74,14 @@ class NewsLetterController {
 
     async sendNewsLetter(req, res, next) {
         try {
+            const { subject, message } = await sendNewsLetterValidation.validateAsync(req.body);
             
+            await this.#service.sendNewsLetter({ subject, message });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "خبرنامه ها با موفقعیت ارسال شدند"
+            })
         } catch (error) {
             next(error);
         }
