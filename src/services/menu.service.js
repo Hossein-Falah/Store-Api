@@ -12,7 +12,8 @@ class MenuService {
     };
 
     async getAllMenus() {
-        
+        const menus = await this.#model.find({ parent: null }, { __v: 0 });
+        return menus;
     }
 
     async createMenu({ title, slug, parent }) {

@@ -15,7 +15,12 @@ class MenuController {
 
     async getAllMenus(req, res, next) {
         try {
-            
+            const menus = await this.#service.getAllMenus();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                menus
+            })
         } catch (error) {
             next(error);
         }
