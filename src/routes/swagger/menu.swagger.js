@@ -1,6 +1,6 @@
 /**
  * @swagger
- *  componets:
+ *  components:
  *      schemas:
  *          Menu:
  *              type: object

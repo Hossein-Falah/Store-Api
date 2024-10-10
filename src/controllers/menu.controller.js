@@ -1,5 +1,8 @@
 const autoBind = require("auto-bind");
+const { StatusCodes } = require("http-status-codes");
+
 const menuService = require("../services/menu.service");
+const { menuValidation } = require("../validations/menu.validation");
 
 class MenuController {
     #service;
@@ -19,7 +22,14 @@ class MenuController {
 
     async createMenu(req, res, next) {
         try {
-            
+            const menuData = await menuValidation.validateAsync(req.body);
+
+            await this.#service.createMenu(menuData);
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "دسته بندی با موفقیت اضافه شد"
+            });
         } catch (error) {
             next(error);
         }
