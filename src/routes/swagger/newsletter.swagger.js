@@ -74,7 +74,7 @@
 /**
  * @swagger
  *  /newsletter/unsubscribe:
- *      post:
+ *      put:
  *          summary: unsubscribe newsletter
  *          tags: [NewsLetter]
  *          requestBody:

@@ -46,7 +46,6 @@ class NewsLetterController {
         try {
             const { email } = await newsLetterValidation.validateAsync(req.body);
             
-
             const message = await this.#service.subscribe({ email });
 
             return res.status(StatusCodes.CREATED).json({
@@ -60,7 +59,14 @@ class NewsLetterController {
 
     async unsubscribe(req, res, next) {
         try {
-            
+            const { email } = await newsLetterValidation.validateAsync(req.body);
+
+            await this.#service.unsubscribe({ email });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "لغو اشتراک شما با موفقیت انجام شد"
+            });
         } catch (error) {
             next(error);
         }
