@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const newsletterService = require("../services/newsletter.service");
 const { newsLetterValidation } = require("../validations/newsletter.validation");
 const { StatusCodes } = require("http-status-codes");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class NewsLetterController {
     #service;
@@ -26,7 +27,16 @@ class NewsLetterController {
 
     async getNewsLetter(req, res, next) {
         try {
+            const { id } = req.params;
             
+            await objectIdValidation.validateAsync({ id });
+
+            const user = await this.#service.getNewsLetter({ id });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                user
+            });
         } catch (error) {
             next(error);
         }

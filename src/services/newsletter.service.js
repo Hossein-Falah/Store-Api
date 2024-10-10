@@ -15,8 +15,9 @@ class NewsLetterService {
         return users;
     };
 
-    async getNewsLetter() {
-        
+    async getNewsLetter({ id }) {
+        const user = await this.#model.findOne({ _id: id });
+        return user;
     };
 
     async subscribe({ email }) {
