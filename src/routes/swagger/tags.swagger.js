@@ -15,4 +15,6 @@
  *        description: notification controll mangement route
  *      - name: Contact
  *        description: contact controll mangement route
+ *      - name: NewsLetter
+ *        description: newsletter controll mangement route
  */
