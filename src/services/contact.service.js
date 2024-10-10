@@ -51,9 +51,6 @@ class ContactService {
                 pass: process.env.EMAIL_PASSWORD
             }
         });
-
-        console.log(process.env.EMAIL);
-        console.log(process.env.EMAIL_PASSWORD);
         
         const emailOption = {
             from: process.env.EMAIL,

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
 const nodemailer = require('nodemailer')
+const { promisify } = require('util')
 
 const BanModel = require("../models/ban.model");
 const UserModel = require("../models/user.model");
@@ -96,7 +97,7 @@ class AuthService {
             }
         });
 
-        const sendMessage = await transport.sendMail({
+        const emailOption = {
             from: process.env.EMAIL,
             to: user.email,
             subject: "بازیابی رمز عبور",
@@ -105,8 +106,17 @@ class AuthService {
                 <a href="${resetUrl}">Reset Password</a>
                 <p>This link is valid for 1 hour.</p>
             `
-        });
-        return sendMessage
+        };
+
+        // convert sendMail to Promise
+        const sendMail = promisify(transport.sendMail).bind(transport);
+
+        try {
+            await sendMail(emailOption);
+        } catch (error) {
+            console.error("Error sending email:", error);
+            throw new createHttpError.InternalServerError("ارسال پیام انجام نشد");
+        }
     }
 
     async resetPassword({ token, password }) {
