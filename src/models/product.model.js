@@ -1,4 +1,3 @@
-const { required } = require("joi");
 const { Schema, default: mongoose } = require("mongoose");
 
 const ProductSchema = new Schema({
@@ -38,6 +37,9 @@ const ProductSchema = new Schema({
     price: {
         type: Number,
         default: 0
+    },
+    quantity: {
+        type: Number
     },
     comments: {
         type: [mongoose.Types.ObjectId],
@@ -80,6 +82,8 @@ const ProductSchema = new Schema({
         virtuals: true
     }
 });
+
+ProductSchema.index({ title: 'text', description: 'text', content: 'text' });
 
 const ProductModel = mongoose.model('product', ProductSchema);
 

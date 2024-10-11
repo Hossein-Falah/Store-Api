@@ -8,6 +8,7 @@ const { NotificationRoutes } = require("./notification.routes");
 const { ContactRoutes } = require("./contact.routes");
 const { NewsLetterRoutes } = require("./newsletter.routes");
 const { MenuRoutes } = require("./menu.routes");
+const { ProductRoutes } = require("./product.routes");
 
 const router = Router();
 
@@ -20,6 +21,7 @@ router.use(`/notifications`, NotificationRoutes);
 router.use(`/contact`, ContactRoutes);
 router.use(`/newsletter`, NewsLetterRoutes);
 router.use(`/menu`, MenuRoutes);
+router.use(`/products`, ProductRoutes);
 
 module.exports = {
     AllRoutes: router
