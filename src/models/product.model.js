@@ -11,7 +11,7 @@ const ProductSchema = new Schema({
         type: String,
         required: true,
         min: 3,
-        max: 255
+        max: 500
     },
     content: {
         type: String,
@@ -72,7 +72,7 @@ const ProductSchema = new Schema({
     },
     status: {
         type: String,
-        default: 0,
+        required: true,
         enum: ["available", "unavailable"],
     }
 }, {

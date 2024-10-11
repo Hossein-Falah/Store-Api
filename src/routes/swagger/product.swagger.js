@@ -11,6 +11,7 @@
  *                  - images
  *                  - category
  *                  - slug
+ *                  - status
  *              properties:
  *                  title:
  *                      type: string
@@ -23,7 +24,9 @@
  *                      description: product content
  *                  images:
  *                      type: array
- *                      description: product images
+ *                      items:
+ *                          type: string
+ *                          format: binary
  *                  category:
  *                      type: string
  *                      description: product category
@@ -90,10 +93,7 @@
  *          summary: create product
  *          requestBody:
  *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Product'
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/Product'
  *          responses:
@@ -118,10 +118,7 @@
  *                type: string
  *          requestBody:
  *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Product'
- *                  application/x-www-form-urlencoded:
+ *                  multipart/form-data:
  *                      schema:
  *                          $ref: '#/components/schemas/Product'
  *          responses:

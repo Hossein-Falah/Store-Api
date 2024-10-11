@@ -10,14 +10,35 @@ const deleteInvalidPropertyObject = (data = {}, blackList = []) => {
     });
 };
 
-const deleteImageFile = (fileAddress) => {
-    if (fileAddress) {        
-        const pathFile = path.join(__dirname, "..", "..", fileAddress);
-        if (fs.existsSync(pathFile)) fs.unlinkSync(pathFile);
-    }
-}
+const deleteImageFile = async (fileAddress) => {
+    const pathFile = Array.isArray(fileAddress)
+        ? fileAddress.map(address => path.join(__dirname, "..", "..", address))
+        : [path.join(__dirname, "..", "..", fileAddress)];
+
+    const deletePromises = pathFile.map(async pathFile => {
+        if (fs.existsSync(pathFile)) {
+            try {
+                await fs.promises.unlink(pathFile);
+            } catch (error) {
+                console.error(`Error with file: ${pathFile}`, error);
+            }
+        }
+    });
+
+    await Promise.all(deletePromises);
+};
+
+const getListOfImages = (files = [], folder, basePath = "") => {
+    return files
+        .filter(file => Boolean(file && file.path))
+        .map(file => {
+            const originalName = file.path.replace(/\\/g, "/").split("/");
+            return `${basePath}/uploads/${folder}/${originalName[originalName.length - 1]}`;
+        });
+};
 
 module.exports = {
     deleteInvalidPropertyObject,
-    deleteImageFile
+    deleteImageFile,
+    getListOfImages
 }
