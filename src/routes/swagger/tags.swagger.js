@@ -18,4 +18,7 @@
  *      - name: NewsLetter
  *        description: newsletter controll mangement route
  *      - name: Menu
+ *        description: menu controll mangement route
+ *      - name: Product
+ *        description: product controll mangement route
  */
