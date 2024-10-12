@@ -11,7 +11,7 @@ const uploadProduct = uploadMiddleware('products');
 router.get(`/`, ProductController.getProducts);
 router.get(`/:id`, ProductController.getProductById);
 router.post(`/create`, authenticateToken, uploadProduct.array('images', 10), tags("tags"), ProductController.createProduct);
-router.patch(`/update/:id`, ProductController.updateProduct);
+router.patch(`/update/:id`, authenticateToken, uploadProduct.array('images', 10), tags("tags"), ProductController.updateProduct);
 router.delete(`/delete/:id`, ProductController.removeProduct);
 router.put(`/like/:id`, authenticateToken, ProductController.likeProduct);
 router.put(`/bookmark/:id`, authenticateToken, ProductController.bookmarkProduct);

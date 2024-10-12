@@ -48,6 +48,44 @@
  *                  status:
  *                      type: string
  *                      description: product status
+ *          updateProduct:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: product title
+ *                  description:
+ *                      type: string
+ *                      description: product description
+ *                  content:
+ *                      type: string
+ *                      description: product content
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                          format: binary
+ *                  category:
+ *                      type: string
+ *                      description: product category
+ *                  slug:
+ *                      type: string
+ *                      description: product slug
+ *                  tags:
+ *                      type: array
+ *                      description: product tags
+ *                  price:
+ *                      type: number
+ *                      description: product price
+ *                  discount:
+ *                      type: number
+ *                      description: product discount
+ *                  quantity:
+ *                      type: number
+ *                      description: product quantity
+ *                  status:
+ *                      type: string
+ *                      description: product status
  */
 
 /**
@@ -120,7 +158,7 @@
  *              content:
  *                  multipart/form-data:
  *                      schema:
- *                          $ref: '#/components/schemas/Product'
+ *                          $ref: '#/components/schemas/updateProduct'
  *          responses:
  *              200:
  *                  description: success

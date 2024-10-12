@@ -3,7 +3,7 @@ const createHttpError = require("http-errors");
 const { default: mongoose } = require("mongoose");
 
 const ProductModel = require("../models/product.model");
-const { getListOfImages } = require("../utils/function.utils");
+const { getListOfImages, deleteInvalidPropertyObject } = require("../utils/function.utils");
 
 class ProductService {
     #model;
@@ -122,8 +122,17 @@ class ProductService {
         if (!product) throw new createHttpError.InternalServerError("محصول ایجاد نشد");
     };
 
-    async updateProduct() {
+    async updateProduct(req, id, productData) {
+        const product = await this.checkExistProduct(id);
+
+        productData.images = getListOfImages(req?.files, "products");
+
+        const blackList = ["author", "bookmarks", "likes", "dislikes", "comments"];
+        deleteInvalidPropertyObject(productData, blackList);
         
+        const resultUpdateProduct = await this.#model.updateOne({ _id: product._id }, { $set: productData });
+
+        if (!resultUpdateProduct.modifiedCount) throw new createHttpError.InternalServerError("ویرایش محصول انجام نشد");
     }
 
     async removeProduct(id) {

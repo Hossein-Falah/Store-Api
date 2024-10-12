@@ -1,7 +1,7 @@
 const autoBind = require("auto-bind");
 const productService = require("../services/product.service");
 const { StatusCodes } = require("http-status-codes");
-const { productValidation } = require("../validations/product.validation");
+const { productValidation, updateProductValidation } = require("../validations/product.validation");
 const { deleteImageFile, getListOfImages } = require("../utils/function.utils");
 const { objectIdValidation } = require("../validations/id.validation");
 
@@ -62,8 +62,20 @@ class ProductController {
 
     async updateProduct(req, res, next) {
         try {
-            
-        } catch (error) {
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+            const productData = await updateProductValidation.validateAsync(req.body);            
+
+            await this.#service.updateProduct(req, id, productData);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "محصول با موفقیت ویرایش شد",
+            })
+        } catch (error) {    
+            const images = getListOfImages(req?.files, "products", "/public");
+            await deleteImageFile(images);
             next(error);
         }
     }
