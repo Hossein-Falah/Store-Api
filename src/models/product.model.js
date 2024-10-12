@@ -61,7 +61,7 @@ const ProductSchema = new Schema({
         ref: "user",
         default: []
     },
-    bookmark: {
+    bookmarks: {
         type: [mongoose.Types.ObjectId],
         ref: "user",
         default: [] 

@@ -157,8 +157,18 @@ class ProductService {
         return message;
     };
 
-    async bookmarkProduct() {
-        
+    async bookmarkProduct(req, id) {
+        const user = req?.user;
+
+        await this.checkExistProduct(id);
+
+        const bookmarkedBlog = await this.#model.findOne({ _id: id, bookmarks: user._id });
+
+        const updateQuery = bookmarkedBlog ? { $pull: { bookmarks: user._id } } : { $push: { bookmarks: user._id }};
+        await this.#model.updateOne({ _id: id }, updateQuery);
+
+        const message = bookmarkedBlog ? "مقاله از لیست علاقه مندی پاک شد" : "مقاله به لیست علاقه مندی ها اضافه شد";
+        return message;
     };
 
     async checkExistProduct(id) {

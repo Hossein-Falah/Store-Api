@@ -14,7 +14,7 @@ router.post(`/create`, authenticateToken, uploadProduct.array('images', 10), tag
 router.patch(`/update/:id`, ProductController.updateProduct);
 router.delete(`/delete/:id`, ProductController.removeProduct);
 router.put(`/like/:id`, authenticateToken, ProductController.likeProduct);
-router.put(`/bookmark/:id`, ProductController.bookmarkProduct);
+router.put(`/bookmark/:id`, authenticateToken, ProductController.bookmarkProduct);
 
 module.exports = {
     ProductRoutes: router
