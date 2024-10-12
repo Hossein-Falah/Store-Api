@@ -15,7 +15,12 @@ class ProductController {
 
     async getProducts(req, res, next) {
         try {
-            
+            const products = await this.#service.getProducts();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                products
+            })
         } catch (error) {
             next(error);
         }

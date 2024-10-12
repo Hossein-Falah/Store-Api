@@ -13,7 +13,41 @@ class ProductService {
     }
 
     async getProducts() {
-        
+        const products = await this.#model.aggregate([
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "author",
+                    foreignField: "_id",
+                    as: "author"
+                }
+            },
+            {
+                $unwind: "$author"
+            },
+            {
+                $project: {
+                    "category.__v": 0,
+                    "author.password": 0,
+                    "author.refreshToken": 0,
+                    "author.role": 0,
+                    "author.__v": 0,
+                }
+            }
+        ]);
+
+        return products;
     }
 
     async getProductById() {
