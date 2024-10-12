@@ -28,7 +28,16 @@ class ProductController {
 
     async getProductById(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const product = await this.#service.getProductById(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                product
+            })
         } catch (error) {
             next(error);
         }

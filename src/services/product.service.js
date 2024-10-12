@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
+const { default: mongoose } = require("mongoose");
 
 const ProductModel = require("../models/product.model");
 const { getListOfImages } = require("../utils/function.utils");
@@ -50,8 +51,45 @@ class ProductService {
         return products;
     }
 
-    async getProductById() {
-        
+    async getProductById(id) {
+        const product = await this.#model.aggregate([
+            {
+                $match: { _id: new mongoose.Types.ObjectId(id) }
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "author",
+                    foreignField: "_id",
+                    as: "author"
+                }
+            },
+            {
+                $unwind: "$author"
+            },
+            {
+                $project: {
+                    "category.__v": 0,
+                    "author.password": 0,
+                    "author.refreshToken": 0,
+                    "author.role": 0,
+                    "author.__v": 0,
+                }
+            }
+        ]);
+
+        return product;
     }
 
     async createProduct(req, productData) {
