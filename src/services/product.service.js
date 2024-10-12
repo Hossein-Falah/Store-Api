@@ -133,8 +133,28 @@ class ProductService {
         if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف محصول انجام نشد");
     };
 
-    async likeProduct() {
-        
+    async likeProduct(req, id) {
+        const user = req?.user;
+
+        await this.checkExistProduct(id);
+
+        const likedBlog = await this.#model.findOne({ _id: id, likes: user._id });
+        const disLikedBlog = await this.#model.findOne({ _id: id, dislikes: user._id });
+
+        let message;
+
+        if (likedBlog) {
+            await this.#model.updateOne({ _id: id }, { $pull: { likes: user._id }, $push: { dislikes: user._id } });
+            message = "مقاله دیس لایک شد";
+        } else if(disLikedBlog) {
+            await this.#model.updateOne({ _id: id }, { $pull: { dislikes: user._id }, $push: { likes: user._id } });
+            message = "مقاله لایک شد";
+        } else {
+            await this.#model.updateOne({ _id: id }, { $push: { likes: user._id } });
+            message = "مقاله لایک شد";
+        }
+
+        return message;
     };
 
     async bookmarkProduct() {

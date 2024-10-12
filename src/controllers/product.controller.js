@@ -87,7 +87,14 @@ class ProductController {
 
     async likeProduct(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            const message = await this.#service.likeProduct(req, id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message
+            })
         } catch (error) {
             next(error);
         }

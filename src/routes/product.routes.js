@@ -13,7 +13,7 @@ router.get(`/:id`, ProductController.getProductById);
 router.post(`/create`, authenticateToken, uploadProduct.array('images', 10), tags("tags"), ProductController.createProduct);
 router.patch(`/update/:id`, ProductController.updateProduct);
 router.delete(`/delete/:id`, ProductController.removeProduct);
-router.put(`/like/:id`, ProductController.likeProduct);
+router.put(`/like/:id`, authenticateToken, ProductController.likeProduct);
 router.put(`/bookmark/:id`, ProductController.bookmarkProduct);
 
 module.exports = {
