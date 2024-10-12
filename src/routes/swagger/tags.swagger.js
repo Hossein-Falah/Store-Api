@@ -21,4 +21,6 @@
  *        description: menu controll mangement route
  *      - name: Product
  *        description: product controll mangement route
+ *      - name: Discount
+ *        description: discount controll mangement route
  */
