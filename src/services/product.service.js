@@ -54,8 +54,11 @@ class ProductService {
         
     }
 
-    async removeProduct() {
-        
+    async removeProduct(id) {
+        const product = await this.checkExistProduct(id);
+
+        const resultDelete = await this.#model.deleteOne({ _id: product._id });
+        if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف محصول انجام نشد");
     };
 
     async likeProduct() {
@@ -65,6 +68,12 @@ class ProductService {
     async bookmarkProduct() {
         
     };
+
+    async checkExistProduct(id) {
+        const product = await this.#model.findById({ _id: id });
+        if (!product) throw new createHttpError.NotFound("محصول مورد نظر پیدا نشد");
+        return product;
+    }
 
     async checkExistWithTitle({ title }) {
         const existTitle = await this.#model.findOne({ title });

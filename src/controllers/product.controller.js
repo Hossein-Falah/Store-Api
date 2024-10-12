@@ -3,6 +3,7 @@ const productService = require("../services/product.service");
 const { StatusCodes } = require("http-status-codes");
 const { productValidation } = require("../validations/product.validation");
 const { deleteImageFile, getListOfImages } = require("../utils/function.utils");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class ProductController {
     #service;
@@ -55,7 +56,16 @@ class ProductController {
 
     async removeProduct(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.removeProduct(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "محصول با موفقیت حذف شد",
+            })
         } catch (error) {
             next(error);
         }
