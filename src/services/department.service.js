@@ -31,8 +31,11 @@ class DepartmentService {
         if (!resultUpdate.modifiedCount) throw new createHttpError.InternalServerError("بروزرسانی دپارتمان انجام نشد");
     };
 
-    async deleteDepartment() {
-        
+    async deleteDepartment(id) {
+        await this.checkExistById({ id });
+
+        const resultDelete = await this.#model.deleteOne({ _id: id });
+        if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف دپارتمان انجام نشد");
     };
 
     async checkExistById({ id }) {
