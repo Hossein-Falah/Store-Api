@@ -105,7 +105,6 @@ class blogService {
             const originalName = req?.file?.path?.replace(/\\/g, "/").split("/")[6];
             const image = `/uploads/blogs/${originalName}`;
             blogData.image = image;
-            console.log(image);
             deleteImageFile(blog.image);
         }
 

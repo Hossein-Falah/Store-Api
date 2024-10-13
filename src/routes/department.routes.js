@@ -9,7 +9,7 @@ router.post(`/create`, departmentController.createDepartment);
 router.put(`/update/:id`, departmentController.updateDepartment);
 router.delete(`/delete/:id`, departmentController.deleteDepartment);
 
-router.get(`/sub`, subDepartmentController.createSubDepartment);
+router.get(`/sub`, subDepartmentController.getAllSubDepartments);
 router.post(`/sub/create`, subDepartmentController.createSubDepartment);
 router.put(`/sub/update/:id`, subDepartmentController.updateSubDepartment);
 router.delete(`/sub/delete/:id`, subDepartmentController.deleteSubDepartment);

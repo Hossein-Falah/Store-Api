@@ -15,7 +15,16 @@ class SubDepartmentController {
 
     async getAllSubDepartments(req, res, next) {
         try {
-            
+            const { department } = req.query;
+
+            await objectIdValidation.validateAsync({ id: department });
+
+            const subDepartments = await this.#service.getAllSubDepartments({ department });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                subDepartments
+            });
         } catch (error) {
             next(error)
         }

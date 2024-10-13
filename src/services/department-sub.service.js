@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
 
 const SubDepartmentModel = require("../models/department-sub.model");
+const { default: mongoose } = require("mongoose");
 
 class SubDepartmentService {
     #model;
@@ -11,8 +12,33 @@ class SubDepartmentService {
         this.#model = SubDepartmentModel;
     };
 
-    async getAllSubDepartments() {
+    async getAllSubDepartments({ department }) {
+        const subDepartments = await this.#model.aggregate([
+            {
+                $match: { department: new mongoose.Types.ObjectId(department) }
+            },
+            {
+                $lookup: {
+                    from: "departments",
+                    localField: "department",
+                    foreignField: "_id",
+                    as: "department"
+                }
+            },
+            {
+                $unwind: "$department"
+            },
+            {
+                $project: {
+                    "__v": 0,
+                    "updatedAt": 0,
+                    "createdAt": 0,
+                    "department.__v": 0,
+                }
+            }
+        ])
         
+        return subDepartments;
     }
 
     async createSubDepartment({ title, department }) {

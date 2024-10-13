@@ -118,6 +118,10 @@
  *      get:
  *          tags: [Department]
  *          summary: get sub department
+ *          parameters:
+ *              - in: query
+ *                name: department
+ *                type: string
  *          responses:
  *              200:
  *                  description: get sub department
