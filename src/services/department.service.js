@@ -24,12 +24,20 @@ class DepartmentService {
         if (!newDepartment) throw new createHttpError.InternalServerError("دپارتمان ایجاد نشد");
     };
 
-    async updateDepartment() {
-        
+    async updateDepartment({ id, title }) {
+        await this.checkExistById({ id });
+    
+        const resultUpdate = await this.#model.updateOne({ _id: id }, { $set: { title } });
+        if (!resultUpdate.modifiedCount) throw new createHttpError.InternalServerError("بروزرسانی دپارتمان انجام نشد");
     };
 
     async deleteDepartment() {
         
+    };
+
+    async checkExistById({ id }) {
+        const department = await this.#model.findById({ _id: id });
+        if (!department) throw new createHttpError.NotFound("دپارتمان وجود ندارد");
     };
 
     async checkExistWithTitle({ title }) {

@@ -69,6 +69,11 @@
  *      put:
  *          tags: [Department]
  *          summary: update department
+ *          parameters:
+ *              - in: path
+ *                required: true
+ *                name: id
+ *                type: string
  *          requestBody:
  *              required: true
  *              content:

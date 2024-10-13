@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const departmentService = require("../services/department.service");
 const { departmentValidation } = require("../validations/department.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class DepartmentController {
     #service;
@@ -44,7 +45,18 @@ class DepartmentController {
 
     async updateDepartment(req, res, next) {
         try {
-            
+            const { id } = req.params;
+            const { title } = req.body;
+
+            await objectIdValidation.validateAsync({ id });
+            await departmentValidation.validateAsync({ title });
+
+            await this.#service.updateDepartment({ id, title });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "دپارتمان با موفقیت ویرایش شد"
+            });
         } catch (error) {
             next(error);
         }

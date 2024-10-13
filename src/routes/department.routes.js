@@ -6,7 +6,7 @@ const router = Router();
 
 router.get(`/`, departmentController.getAllDepartments);
 router.post(`/create`, departmentController.createDepartment);
-router.patch(`/update/:id`, departmentController.updateDepartment);
+router.put(`/update/:id`, departmentController.updateDepartment);
 router.delete(`/delete/:id`, departmentController.deleteDepartment);
 
 router.get(`/sub`, subDepartmentController.createSubDepartment);
