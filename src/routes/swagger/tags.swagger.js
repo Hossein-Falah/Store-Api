@@ -23,4 +23,6 @@
  *        description: product controll mangement route
  *      - name: Discount
  *        description: discount controll mangement route
+ *      - name: Department
+ *        description: department controll mangement route
  */
