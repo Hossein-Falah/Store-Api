@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const subDepartmentService = require("../services/department-sub.service");
 const { subDepartmentValidation } = require("../validations/department.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class SubDepartmentController {
     #service;
@@ -47,7 +48,16 @@ class SubDepartmentController {
 
     async deleteSubDepartment(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.deleteSubDepartment(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "فرزند دپارتمان با موفقیت حذف شد"
+            })
         } catch (error) {
             next(error);
         }

@@ -26,9 +26,17 @@ class SubDepartmentService {
         
     };
 
-    async deleteSubDepartment() {
-        
+    async deleteSubDepartment(id) {
+        await this.checkExistById({ id });
+
+        const resultDelete = await this.#model.deleteOne({ _id: id });
+        if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("حذف فرزند دپارتمان انجام نشد");
     };
+
+    async checkExistById({ id }) {
+        const subDepartment = await this.#model.findById({ _id: id });
+        if (!subDepartment) throw new createHttpError.NotFound("فرزند دپارتمان وجود ندارد");
+    }
 
     async checkExistWithTitle({ title }) {
         const existTitle = await this.#model.findOne({ title });
