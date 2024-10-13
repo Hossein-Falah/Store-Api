@@ -64,7 +64,16 @@ class DiscountController {
 
     async deleteDiscountByDiscount(req, res, next) {
         try {
-            
+            const { discountID } = req.params;
+
+            await objectIdValidation.validateAsync({ id: discountID });
+
+            await this.#service.deleteDiscountByDiscount({ discountID });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "تخفیف با موفقیت حذف شد",
+            });
         } catch (error) {
             next(error);
         }

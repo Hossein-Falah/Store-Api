@@ -56,8 +56,11 @@ class DiscountController {
     
     };
 
-    async deleteDiscountByDiscount() {
-    
+    async deleteDiscountByDiscount({ discountID }) {
+        await this.checkExistDiscount(discountID);
+
+        const resultDelete = await this.#model.deleteOne({ _id: discountID });
+        if (!resultDelete.deletedCount) throw new createHttpError.InternalServerError("خطا در حذف تخفیف");
     };
 
     async deleteAllDiscounts() {
@@ -80,6 +83,11 @@ class DiscountController {
 
         if (!product) throw new createHttpError.InternalServerError("خطا در ثبت تخفیف");
     };
+
+    async checkExistDiscount(id) {
+        const discount = await this.#model.findById({ _id: id });
+        if (!discount) throw new createHttpError.NotFound("کد تخفیف با همچین مشخصات یافت نشد");
+    }
 
     async checkExistProduct(id) {
         const product = await this.#productModel.findById({ _id: id });
