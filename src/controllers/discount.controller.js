@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const discountService = require("../services/discount.service");
 const { discountValidation } = require("../validations/discount.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class DiscountController {
     #service;
@@ -22,7 +23,17 @@ class DiscountController {
 
     async getDiscount(req, res, next) {
         try {
-            
+            const { code } = req.params;
+            const { product } = req.body;
+
+            await objectIdValidation.validateAsync({ id: product });
+
+            const discount = await this.#service.getDiscount({ code, product });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                discount
+            });
         } catch (error) {
             next(error);
         }

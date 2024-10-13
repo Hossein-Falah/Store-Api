@@ -18,8 +18,19 @@ class DiscountController {
     
     };
 
-    async getDiscount() {
-    
+    async getDiscount({ code, product }) {
+        await this.checkExistProduct(product);
+
+        const discount = await this.#model.findOne({ code, product });
+        if (!discount) {
+            throw new createHttpError.NotFound("محصولی با همچین مشخصات یافت نشد");
+        } else if (discount.uses === discount.max) {
+            throw new createHttpError.BadRequest("تخفیف به پایان رسیده است");
+        } else {
+            await this.#model.findOneAndUpdate({ code, product }, { uses: discount.uses + 1 });
+
+            return { message: "کد تخفیف با موفقیت اعمال شد" };
+        }
     };
 
     async createDiscount(req, discountData) {
