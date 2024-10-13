@@ -61,7 +61,8 @@ class DiscountController {
     };
 
     async deleteAllDiscounts() {
-    
+        const result = await this.#model.deleteMany({});
+        if (!result.deletedCount) throw new createHttpError.BadRequest("خطا در حذف تخفیف ها");
     };
 
     async setAllDiscounts({ discount }) {

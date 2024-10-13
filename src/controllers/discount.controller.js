@@ -72,7 +72,12 @@ class DiscountController {
 
     async deleteAllDiscounts(req, res, next) {
         try {
-            
+            await this.#service.deleteAllDiscounts();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "تخفیف ها با موفقیت حذف شدند",
+            });
         } catch (error) {
             next(error);
         }
