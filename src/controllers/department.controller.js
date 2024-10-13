@@ -1,5 +1,8 @@
 const autoBind = require("auto-bind");
+const { StatusCodes } = require("http-status-codes");
+
 const departmentService = require("../services/department.service");
+const { departmentValidation } = require("../validations/department.validation");
 
 class DepartmentController {
     #service;
@@ -19,7 +22,16 @@ class DepartmentController {
 
     async createDepartment(req, res, next) {
         try {
-            
+            const { title } = req.body;
+
+            await departmentValidation.validateAsync({ title });
+
+            await this.#service.createDepartment({ title });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "دپارتمان با موفقیت اضافه شد"
+            });
         } catch (error) {
             next(error);
         }

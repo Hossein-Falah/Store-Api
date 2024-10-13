@@ -1,4 +1,6 @@
 const autoBind = require("auto-bind");
+const createHttpError = require("http-errors");
+
 const DepartmentModel = require("../models/department.model");
 
 class DepartmentService {
@@ -13,8 +15,11 @@ class DepartmentService {
         
     }
 
-    async createDepartment() {
-        
+    async createDepartment({ title }) {
+        await this.checkExistWithTitle({ title });
+
+        const newDepartment = await this.#model.create({ title });
+        if (!newDepartment) throw new createHttpError.InternalServerError("دپارتمان ایجاد نشد");
     };
 
     async updateDepartment() {
@@ -23,7 +28,12 @@ class DepartmentService {
 
     async deleteDepartment() {
         
-    }
+    };
+
+    async checkExistWithTitle({ title }) {
+        const existTitle = await this.#model.findOne({ title });
+        if (existTitle) throw new createHttpError.Conflict("نام عنوان تکراری است");
+    };
 };
 
 module.exports = new DepartmentService();
