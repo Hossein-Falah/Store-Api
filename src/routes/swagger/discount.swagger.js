@@ -119,7 +119,7 @@
 /**
  * @swagger
  *  /discount/update/{discountID}:
- *      put:
+ *      patch:
  *          tags: [Discount]
  *          summary: update discount
  *          parameters:

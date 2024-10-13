@@ -14,7 +14,14 @@ const discountCodeValidation = Joi.object({
     discount: Joi.number().min(0).max(100).required("ایدی تخفیف نمی تواند خالی باشد").error(createHttpError.BadRequest("ایدی تخفیف صحیح نمی باشد")),
 });
 
+const updateDiscountValidation = Joi.object({
+    code: Joi.string().min(3).max(20).error(createHttpError.BadRequest("کد تخفیف نمی تواند خالی باشد")),
+    percent: Joi.number().allow("").min(0).max(100).error(createHttpError.BadRequest("درصد تخفیف نمی تواند خالی باشد")),
+    max: Joi.number().allow("").min(0).error(createHttpError.BadRequest("حداکثر تعداد نمی تواند خالی باشد")),
+})
+
 module.exports = {
     discountValidation,
-    discountCodeValidation
+    discountCodeValidation,
+    updateDiscountValidation
 }

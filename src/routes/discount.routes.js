@@ -6,7 +6,7 @@ const router = Router();
 
 router.get(`/`, DiscountController.getAllDiscounts);
 router.post(`/create`, authenticateToken, DiscountController.createDiscount);
-router.put(`/update/:discountID`, DiscountController.updateDiscountByDiscount);
+router.patch(`/update/:discountID`, DiscountController.updateDiscountByDiscount);
 router.put(`/one/:productID`, DiscountController.setOneDiscount);
 router.delete(`/delete/:discountID`, DiscountController.deleteDiscountByDiscount);
 router.post(`/all`, DiscountController.setAllDiscounts);

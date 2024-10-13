@@ -2,7 +2,7 @@ const autoBind = require("auto-bind");
 const { StatusCodes } = require("http-status-codes");
 
 const discountService = require("../services/discount.service");
-const { discountValidation, discountCodeValidation } = require("../validations/discount.validation");
+const { discountValidation, discountCodeValidation, updateDiscountValidation } = require("../validations/discount.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class DiscountController {
@@ -56,7 +56,18 @@ class DiscountController {
 
     async updateDiscountByDiscount(req, res, next) {
         try {
-            
+            const { discountID } = req.params;
+
+            await objectIdValidation.validateAsync({ id: discountID });
+
+            const discountData = await updateDiscountValidation.validateAsync(req.body);
+
+            await this.#service.updateDiscountByDiscount({ discountID, discountData });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "تخفیف با موفقیت ویرایش شد",
+            });
         } catch (error) {
             next(error);
         }

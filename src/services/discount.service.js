@@ -3,6 +3,7 @@ const createHttpError = require("http-errors");
 
 const DiscountModel = require("../models/discount.model");
 const ProductModel = require("../models/product.model");
+const { deleteInvalidPropertyObject } = require("../utils/function.utils");
 
 class DiscountController {
     #model;
@@ -52,8 +53,13 @@ class DiscountController {
         if (!createdDiscount) throw new createHttpError.InternalServerError("خطا در ثبت تخفیف");
     };
 
-    async updateDiscountByDiscount() {
-    
+    async updateDiscountByDiscount({ discountID, discountData }) {
+        await this.checkExistDiscount(discountID);
+
+        deleteInvalidPropertyObject(discountData);
+        
+        const resultUpdate = await this.#model.updateOne({ _id: discountID }, { $set: discountData });
+        if (!resultUpdate.modifiedCount) throw new createHttpError.InternalServerError("خطا در ویرایش تخفیف");
     };
 
     async deleteDiscountByDiscount({ discountID }) {
