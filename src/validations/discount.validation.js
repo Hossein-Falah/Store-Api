@@ -10,6 +10,11 @@ const discountValidation = Joi.object({
     max: Joi.number().min(0).error(createHttpError.BadRequest("حداکثر تعداد نمی تواند خالی باشد")),
 });
 
+const discountCodeValidation = Joi.object({
+    discount: Joi.string().min(0).max(100).required("ایدی تخفیف نمی تواند خالی باشد").error(createHttpError.BadRequest("ایدی تخفیف صحیح نمی باشد")),
+});
+
 module.exports = {
-    discountValidation
+    discountValidation,
+    discountCodeValidation
 }

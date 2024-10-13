@@ -146,14 +146,14 @@
 
 /**
  * @swagger
- *  /discount/one/{discountID}: 
+ *  /discount/one/{productID}: 
  *      put:
  *          tags: [Discount]
  *          summary: update discount
  *          parameters:
  *              - in: path
  *                required: true
- *                name: discountID
+ *                name: productID
  *                type: string
  *          requestBody:
  *              content:

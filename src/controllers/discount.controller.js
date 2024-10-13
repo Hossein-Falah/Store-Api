@@ -88,7 +88,17 @@ class DiscountController {
 
     async setOneDiscount(req, res, next) {
         try {
-            
+            const { productID } = req.params;
+            const { discount } = req.body;
+
+            await objectIdValidation.validateAsync({ id: productID });
+
+            await this.#service.setOneDiscount({ productID, discount });
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "تخفیف با موفقیت ایجاد شد",
+            });
         } catch (error) {
             next(error);
         }

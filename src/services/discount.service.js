@@ -68,8 +68,14 @@ class DiscountController {
     
     };
 
-    async setOneDiscount() {
-    
+    async setOneDiscount({ productID, discount }) {
+        await this.checkExistProduct(productID);
+
+        const product = await this.#productModel.findOneAndUpdate({ _id: productID }, {
+            discount
+        });
+
+        if (!product) throw new createHttpError.InternalServerError("خطا در ثبت تخفیف");
     };
 
     async checkExistProduct(id) {
