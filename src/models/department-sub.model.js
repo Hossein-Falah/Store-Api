@@ -8,6 +8,7 @@ const SubDepartment = new Schema({
     department: {
         type: Schema.Types.ObjectId,
         ref: "department",
+        required: true
     }
 }, {
     timestamps: true

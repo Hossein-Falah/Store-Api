@@ -11,7 +11,7 @@ router.delete(`/delete/:id`, departmentController.deleteDepartment);
 
 router.get(`/sub`, subDepartmentController.createSubDepartment);
 router.post(`/sub/create`, subDepartmentController.createSubDepartment);
-router.patch(`/sub/update/:id`, subDepartmentController.updateSubDepartment);
+router.put(`/sub/update/:id`, subDepartmentController.updateSubDepartment);
 router.delete(`/sub/delete/:id`, subDepartmentController.deleteSubDepartment);
 
 
