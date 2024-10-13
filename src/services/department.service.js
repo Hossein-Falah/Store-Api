@@ -12,7 +12,9 @@ class DepartmentService {
     };
 
     async getAllDepartments() {
-        
+        const departments = await this.#model.find({});
+
+        return departments;
     }
 
     async createDepartment({ title }) {

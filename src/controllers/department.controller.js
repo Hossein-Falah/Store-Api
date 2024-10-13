@@ -14,7 +14,12 @@ class DepartmentController {
 
     async getAllDepartments(req, res, next) {
         try {
-            
+            const departments = await this.#service.getAllDepartments();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                departments
+            });
         } catch (error) {
             next(error)
         }
