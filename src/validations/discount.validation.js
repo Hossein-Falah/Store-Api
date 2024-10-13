@@ -11,7 +11,7 @@ const discountValidation = Joi.object({
 });
 
 const discountCodeValidation = Joi.object({
-    discount: Joi.string().min(0).max(100).required("ایدی تخفیف نمی تواند خالی باشد").error(createHttpError.BadRequest("ایدی تخفیف صحیح نمی باشد")),
+    discount: Joi.number().min(0).max(100).required("ایدی تخفیف نمی تواند خالی باشد").error(createHttpError.BadRequest("ایدی تخفیف صحیح نمی باشد")),
 });
 
 module.exports = {

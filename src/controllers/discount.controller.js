@@ -2,7 +2,7 @@ const autoBind = require("auto-bind");
 const { StatusCodes } = require("http-status-codes");
 
 const discountService = require("../services/discount.service");
-const { discountValidation } = require("../validations/discount.validation");
+const { discountValidation, discountCodeValidation } = require("../validations/discount.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class DiscountController {
@@ -80,7 +80,16 @@ class DiscountController {
 
     async setAllDiscounts(req, res, next) {
         try {
-            
+            const { discount } = req.body;
+
+            await discountCodeValidation.validateAsync({ discount });
+
+            await this.#service.setAllDiscounts({ discount });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "تخفیف با موفقیت ایجاد شد",
+            });
         } catch (error) {
             next(error);
         }

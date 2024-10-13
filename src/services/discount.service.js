@@ -64,8 +64,10 @@ class DiscountController {
     
     };
 
-    async setAllDiscounts() {
-    
+    async setAllDiscounts({ discount }) {
+        const result = await this.#productModel.updateMany({}, { $set: { discount } });
+
+        if (!result.modifiedCount) throw new createHttpError.InternalServerError("خطای سرور");
     };
 
     async setOneDiscount({ productID, discount }) {

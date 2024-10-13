@@ -195,7 +195,7 @@
 /**
  * @swagger
  *  /discount/all:
- *      put:
+ *      post:
  *          tags: [Discount]
  *          summary: set all discounts
  *          requestBody:
