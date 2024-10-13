@@ -15,7 +15,12 @@ class DiscountController {
 
     async getAllDiscounts(req, res, next) {
         try {
-            
+            const discounts = await this.#service.getAllDiscounts();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                discounts
+            })
         } catch (error) {
             next(error);
         }

@@ -16,7 +16,71 @@ class DiscountController {
     };
 
     async getAllDiscounts() {
-    
+        const discounts = await this.#model.aggregate([
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "product",
+                    foreignField: "_id",
+                    as: "product"
+                }
+            },
+            {
+                $unwind: "$product"
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "product.category",
+                    foreignField: "_id",
+                    as: "product.category"
+                }
+            },
+            {
+                $unwind: "$product.category"
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "product.author",
+                    foreignField: "_id",
+                    as: "product.author"
+                }
+            },
+            {
+                $unwind: "$product.author"
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "author",
+                    foreignField: "_id",
+                    as: "author"
+                }
+            },
+            {
+                $unwind: "$author"
+            },
+            {
+                $project: {
+                    "product.category.__v": 0,
+                    "product.author.password": 0,
+                    "product.author.refreshToken": 0,
+                    "product.author.role": 0,
+                    "product.author.__v": 0,
+                    "product.author.createdAt": 0,
+                    "product.author.updatedAt": 0,
+                    "author.createdAt": 0,
+                    "author.updatedAt": 0,
+                    "author.password": 0,
+                    "author.refreshToken": 0,
+                    "author.role": 0,
+                    "author.__v": 0
+                }
+            }
+        ]);
+
+        return discounts;
     };
 
     async getDiscount({ code, product }) {
@@ -57,7 +121,7 @@ class DiscountController {
         await this.checkExistDiscount(discountID);
 
         deleteInvalidPropertyObject(discountData);
-        
+
         const resultUpdate = await this.#model.updateOne({ _id: discountID }, { $set: discountData });
         if (!resultUpdate.modifiedCount) throw new createHttpError.InternalServerError("خطا در ویرایش تخفیف");
     };
