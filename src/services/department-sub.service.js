@@ -22,8 +22,12 @@ class SubDepartmentService {
         if (!newSubDepartment) throw new createHttpError.InternalServerError("فرزند دپارتمان ایجاد نشد");
     };
 
-    async updateSubDepartment() {
-        
+    async updateSubDepartment({ id, title }) {
+        await this.checkExistById({ id });
+        await this.checkExistWithTitle({ title });
+
+        const resultUpdate = await this.#model.updateOne({ _id: id }, { $set: { title } });
+        if (!resultUpdate.modifiedCount) throw new createHttpError.InternalServerError("ویرایش فرزند دپارتمان انجام نشد");
     };
 
     async deleteSubDepartment(id) {
