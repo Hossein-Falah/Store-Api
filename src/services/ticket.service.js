@@ -22,7 +22,107 @@ class TicketService {
     };
 
     async getAllTickets() {
-        
+        const tickets = await this.#model.aggregate([
+            {
+                $match: { answer: 0 }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$user",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "departments",
+                    localField: "department",
+                    foreignField: "_id",
+                    as: "department"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$department",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "departmentsubs",
+                    localField: "departmentSub",
+                    foreignField: "_id",
+                    as: "departmentSub"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$departmentSub",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "departmentsubs",
+                    localField: "departmentSub.parent",
+                    foreignField: "_id",
+                    as: "departmentSub.parent"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$departmentSub.parent",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "tickets",
+                    localField: "parent",
+                    foreignField: "_id",
+                    as: "parent"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$parent",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "title": 1,
+                    "body": 1,
+                    "priority": 1,
+                    "answer": 1,
+                    "isAnswer": 1,
+                    "user.name": 1,
+                    "user.username": 1,
+                    "user.email": 1,
+                    "user.phone": 1,
+                    "parent.title": 1,
+                    "parent.body": 1,
+                    "parent.user.name": 1,
+                    "parent.user.username": 1,
+                    "parent.user.email": 1,
+                    "parent.user.phone": 1,
+                    "department._id": 1,
+                    "department.title": 1,
+                    "departmentSub._id": 1,
+                    "departmentSub.title": 1
+                }
+            }
+        ]);
+
+        return tickets;
     }
 
     async createTicket(req, ticketData) {
