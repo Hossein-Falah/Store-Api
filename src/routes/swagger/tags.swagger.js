@@ -1,6 +1,8 @@
 /**
  * @swagger
  *  tags:
+ *      - name: RBAC 👤
+ *        description: Role Based Access Control
  *      - name: Auth 🔒
  *        description: user authentication api route
  *      - name: User
