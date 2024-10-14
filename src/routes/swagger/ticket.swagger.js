@@ -29,6 +29,15 @@
  *                  departmentSub:
  *                      type: string
  *                      description: The sub-department of the ticket
+ * 
+ *          Answer-Ticket:
+ *              type: object
+ *              required:
+ *                  -   body
+ *              properties:
+ *                  body:
+ *                      type: string
+ *                      description: The description of the answer
  */
 
 /**
@@ -87,19 +96,24 @@
 
 /**
  * @swagger
- *  /ticket/answer:
+ *  /ticket/answer/{id}:
  *      post:
  *          tags: [Ticket]
  *          summary: answer ticket
+ *          parameters:
+ *              - in: path
+ *                required: true
+ *                name: id
+ *                type: string
  *          requestBody:
  *              required: true
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Ticket'
+ *                          $ref: '#/components/schemas/Answer-Ticket'
  *                  application/x-www-form-urlencoded:
  *                      schema:
- *                          $ref: '#/components/schemas/Ticket'
+ *                          $ref: '#/components/schemas/Answer-Ticket'
  *          responses:
  *              200:
  *                  description: answer ticket

@@ -53,8 +53,24 @@ class TicketService {
         
     };
 
-    async answerTicket() {
+    async answerTicket(req, id, body) {
+        const user = req?.user;
         
+        const ticket = await this.checkExistTicket(id);
+
+        const createAnswerTicket = await this.#model.create({
+            title: "پاسخ تیکت",
+            body,
+            department: ticket.department,
+            departmentSub: ticket.departmentSub,
+            user: user._id,
+            priority: ticket.priority,
+            answer: 1,
+            isAnswer: true,
+            parent: id
+        });
+
+        if (!createAnswerTicket) throw new createHttpError.InternalServerError("خطای در ارسال نظر پیش آمده مجددا تلاش کنید");
     };
 
     async getAnsweredTickets() {     
@@ -80,6 +96,12 @@ class TicketService {
         const ticket = await this.#model.findOne({ title });        
         if (ticket) throw new createHttpError.Conflict("نام تیکت تکراری است");
     };
+
+    async checkExistTicket(id) {
+        const ticket = await this.#model.findById({ _id: id });        
+        if (!ticket) throw new createHttpError.NotFound("تیکت مورد نظر یافت نشد");
+        return ticket;
+    }
 };
 
 module.exports = new TicketService();

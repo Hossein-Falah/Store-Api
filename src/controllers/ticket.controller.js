@@ -1,7 +1,8 @@
 const autoBind = require("auto-bind");
 const ticketService = require("../services/ticket.service");
-const { ticketValidation } = require("../validations/ticket.validation");
+const { ticketValidation, answerValidation } = require("../validations/ticket.validation");
 const { StatusCodes } = require("http-status-codes");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class TicketController {
     #service;
@@ -44,7 +45,18 @@ class TicketController {
 
     async answerTicket(req, res, next) {
         try {
-            
+            const { id } = req.params;
+            const { body } = req.body;        
+
+            await objectIdValidation.validateAsync({ id });
+            await answerValidation.validateAsync({ body });
+
+            await this.#service.answerTicket(req, id, body);
+
+            return res.status(StatusCodes.CREATED).json({
+                status: StatusCodes.CREATED,
+                message: "تیکت با موفقیت پاسخ داده شد",
+            });
         } catch (error) {
             next(error);
         }

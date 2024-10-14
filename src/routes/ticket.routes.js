@@ -7,7 +7,7 @@ const router = Router();
 router.get(`/`, TicketController.getAllTickets);
 router.post(`/create`, authenticateToken, TicketController.createTicket);
 router.get(`/user`, TicketController.getAllUserTickets);
-router.post(`/answer`, TicketController.answerTicket);
+router.post(`/answer/:id`, authenticateToken, TicketController.answerTicket);
 router.get(`/answer/:id`, TicketController.getAnsweredTickets);
 
 module.exports = {

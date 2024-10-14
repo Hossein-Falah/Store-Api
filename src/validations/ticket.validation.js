@@ -12,6 +12,11 @@ const ticketValidation = Joi.object({
     parent: Joi.string().optional().allow("").pattern(MongoIDPattern).error(createHttpError.BadRequest("شناسه والد صحیح نمی باشد")),
 })
 
+const answerValidation = Joi.object({
+    body: Joi.string().required("پاسخ نمی تواند خالی باشد").error(createHttpError.BadRequest("پاسخ نمی تواند خالی باشد")),
+})
+
 module.exports = {
-    ticketValidation
+    ticketValidation,
+    answerValidation
 }
