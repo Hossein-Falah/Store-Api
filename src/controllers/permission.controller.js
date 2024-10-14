@@ -2,7 +2,7 @@ const autoBind = require("auto-bind");
 const { StatusCodes } = require("http-status-codes");
 
 const permissionService = require("../services/permission.service");
-const { permissionValidation } = require("../validations/RBAC.validation");
+const { permissionValidation, updatePermissionValidation } = require("../validations/RBAC.validation");
 const { objectIdValidation } = require("../validations/id.validation");
 
 class PermissionController {
@@ -43,7 +43,16 @@ class PermissionController {
 
     async updatePermission(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            const permissionData = await updatePermissionValidation.validateAsync(req.body);
+
+            await this.#service.updatePermission(id, permissionData);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "به روزرسانی با موفقیت انجام شد"
+            });
         } catch (error) {
             next(error);
         }

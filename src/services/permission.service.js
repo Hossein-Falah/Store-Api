@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
 
 const PermissionModel = require("../models/permission.model");
+const { deleteInvalidPropertyObject } = require("../utils/function.utils");
 
 class PermissionService {
     #model;
@@ -23,8 +24,16 @@ class PermissionService {
         if (!permission) throw new createHttpError.InternalServerError("خطا در ایجاد دسترسی");
     };
 
-    async updatePermission() {
+    async updatePermission(id, permissionData) {
+        await this.checkExistPermissionById({ id });
+
+        deleteInvalidPropertyObject(permissionData);
         
+        const updatePermission = await this.#model.updateOne({ _id: id }, {
+            $set: permissionData
+        });
+
+        if (!updatePermission.modifiedCount) throw new createHttpError.InternalServerError("خطا در بروزرسانی دسترسی"); 
     };
 
     async removePermission(id) {
