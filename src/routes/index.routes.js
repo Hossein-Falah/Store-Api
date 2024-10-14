@@ -11,6 +11,7 @@ const { MenuRoutes } = require("./menu.routes");
 const { ProductRoutes } = require("./product.routes");
 const { DiscountRoutes } = require("./discount.routes");
 const { DepartmentRoutes } = require("./department.routes");
+const { TicketRoutes } = require("./ticket.routes");
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.use(`/menu`, MenuRoutes);
 router.use(`/products`, ProductRoutes);
 router.use(`/discount`, DiscountRoutes);
 router.use(`/department`, DepartmentRoutes);
+router.use(`/ticket`, TicketRoutes);
 
 module.exports = {
     AllRoutes: router
