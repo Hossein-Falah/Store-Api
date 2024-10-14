@@ -42,7 +42,12 @@ class TicketController {
 
     async getAllUserTickets(req, res, next) {
         try {
-            
+            const tickets = await this.#service.getAllUserTickets(req);
+
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                tickets
+            })
         } catch (error) {
             next(error);
         }

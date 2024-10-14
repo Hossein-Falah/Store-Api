@@ -150,8 +150,75 @@ class TicketService {
         if (!newTicket) throw new createHttpError.InternalServerError("خطای در ارسال نظر پیش آمده مجددا تلاش کنید");
     };
 
-    async getAllUserTickets() {
-        
+    async getAllUserTickets(req) {
+        const tickets = await this.#model.aggregate([
+            {
+                $match: { user: new mongoose.Types.ObjectId(req.user._id) }
+            },
+            {
+                $sort: { _id: -1 }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$user",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "departments",
+                    localField: "department",
+                    foreignField: "_id",
+                    as: "department"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$department",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "departmentsubs",
+                    localField: "departmentSub",
+                    foreignField: "_id",
+                    as: "departmentSub"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$departmentSub",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "title": 1,
+                    "body": 1,
+                    "priority": 1,
+                    "answer": 1,
+                    "isAnswer": 1,
+                    "user.name": 1,
+                    "user.username": 1,
+                    "user.email": 1,
+                    "user.phone": 1,
+                    "department.title": 1,
+                    "departmentSub.title": 1
+                }
+            }
+        ]);
+
+        return tickets;
     };
 
     async answerTicket(req, id, body) {
