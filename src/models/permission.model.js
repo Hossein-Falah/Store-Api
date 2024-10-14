@@ -12,6 +12,7 @@ const PermissionSchema = new Schema({
         default: ""
     }
 }, {
+    id: false,
     toJSON: {
         virtuals: true
     }

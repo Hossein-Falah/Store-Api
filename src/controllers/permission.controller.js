@@ -14,7 +14,12 @@ class PermissionController {
 
     async getAllPermissions(req, res, next) {
         try {
-            
+            const permissions = await this.#service.getAllPermissions();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                permissions
+            });
         } catch (error) {
             next(error);
         }

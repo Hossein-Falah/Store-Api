@@ -12,7 +12,8 @@ class PermissionService {
     };
 
     async getAllPermissions() {
-        
+        const permissions = await this.#model.find({});
+        return permissions;
     };
 
     async createPermission({ name, description }) {
