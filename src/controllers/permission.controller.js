@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const permissionService = require("../services/permission.service");
 const { permissionValidation } = require("../validations/RBAC.validation");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class PermissionController {
     #service;
@@ -50,7 +51,16 @@ class PermissionController {
 
     async removePermission(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.removePermission(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "دسترسی با موفقیت حذف شد"
+            });
         } catch (error) {
             next(error);
         }
