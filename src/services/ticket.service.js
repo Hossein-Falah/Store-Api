@@ -1,5 +1,6 @@
 const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
+const { default: mongoose } = require("mongoose");
 
 const TicketModel = require("../models/ticket.model");
 const DepartmentModel = require("../models/department.model");
@@ -65,16 +66,84 @@ class TicketService {
             departmentSub: ticket.departmentSub,
             user: user._id,
             priority: ticket.priority,
-            answer: 1,
+            answer: 0,
             isAnswer: true,
             parent: id
         });
 
+        await this.#model.findOneAndUpdate({ _id: id }, { answer: 1 });
+
         if (!createAnswerTicket) throw new createHttpError.InternalServerError("خطای در ارسال نظر پیش آمده مجددا تلاش کنید");
     };
 
-    async getAnsweredTickets() {     
-           
+    async getAnsweredTickets(id) {     
+        const ticket = await this.#model.aggregate([
+            {
+                $match: { _id: new mongoose.Types.ObjectId(id) }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "user",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$user",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "tickets",
+                    localField: "parent",
+                    foreignField: "_id",
+                    as: "parent"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$parent",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "parent.user",
+                    foreignField: "_id",
+                    as: "parent.user"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$parent.user",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    "title": 1,
+                    "body": 1,
+                    "answer": 1,
+                    "isAnswer": 1,
+                    "user.name": 1,
+                    "user.username": 1,
+                    "user.email": 1,
+                    "user.phone": 1,
+                    "parent.title": 1,
+                    "parent.body": 1,
+                    "parent.user.name": 1,
+                    "parent.user.username": 1,
+                    "parent.user.email": 1,
+                    "parent.user.phone": 1
+                }
+            }
+        ]);
+
+        return ticket;
     };
 
     async checkExistDepartment(id) {

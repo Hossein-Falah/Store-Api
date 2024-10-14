@@ -64,7 +64,16 @@ class TicketController {
 
     async getAnsweredTickets(req, res, next) {     
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const ticket = await this.#service.getAnsweredTickets(id);
+
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                ticket
+            });
         } catch (error) {
             next(error);
         }   
