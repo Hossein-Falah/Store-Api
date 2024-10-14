@@ -1,5 +1,8 @@
 const autoBind = require("auto-bind");
+const { StatusCodes } = require("http-status-codes");
+
 const permissionService = require("../services/permission.service");
+const { permissionValidation } = require("../validations/RBAC.validation");
 
 class PermissionController {
     #service;
@@ -19,7 +22,14 @@ class PermissionController {
 
     async createPermission(req, res, next) {
         try {
+            const { name, description } = await permissionValidation.validateAsync(req.body);
             
+            await this.#service.createPermission({ name, description });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "دسترسی با موفقیت ایجاد شد"
+            });
         } catch (error) {
             next(error);
         }

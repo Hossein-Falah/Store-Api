@@ -12,6 +12,8 @@ const { ProductRoutes } = require("./product.routes");
 const { DiscountRoutes } = require("./discount.routes");
 const { DepartmentRoutes } = require("./department.routes");
 const { TicketRoutes } = require("./ticket.routes");
+const { PermissionRoutes } = require("./permission.routes");
+const { RoleRoutes } = require("./role.routes");
 
 const router = Router();
 
@@ -28,6 +30,8 @@ router.use(`/products`, ProductRoutes);
 router.use(`/discount`, DiscountRoutes);
 router.use(`/department`, DepartmentRoutes);
 router.use(`/ticket`, TicketRoutes);
+router.use(`/permission`, PermissionRoutes);
+router.use(`/role`, RoleRoutes);
 
 module.exports = {
     AllRoutes: router
