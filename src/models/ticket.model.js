@@ -19,7 +19,7 @@ const TicketSchema = new Schema({
         default: 0
     },
     isAnswer: {
-        type: Number,
+        type: Boolean,
         required: false
     },
     priority: {

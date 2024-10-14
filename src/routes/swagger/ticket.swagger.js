@@ -4,6 +4,12 @@
  *      schemas:
  *          Ticket:
  *              type: object
+ *              required:
+ *                  -   title
+ *                  -   body
+ *                  -   priority
+ *                  -   department
+ *                  -   departmentSub
  *              properties:
  *                  title:
  *                      type: string
