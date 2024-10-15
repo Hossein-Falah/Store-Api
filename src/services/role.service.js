@@ -1,6 +1,7 @@
 const autoBind = require("auto-bind");
 const RoleModel = require("../models/role.model");
 const createHttpError = require("http-errors");
+const { deleteInvalidPropertyObject } = require("../utils/function.utils");
 
 class RoleService {
     #model;
@@ -22,8 +23,13 @@ class RoleService {
         if (!newRole) throw new createHttpError.InternalServerError("نقش ایجاد نشد");
     };
 
-    async updateRole() {
+    async updateRole(id, roleData) {
+        await this.checkExistRoleById(id);
         
+        deleteInvalidPropertyObject(roleData);
+
+        const updateRole = await this.#model.updateOne({ _id: id }, { $set: roleData });
+        if (!updateRole.modifiedCount) throw new createHttpError.InternalServerError("بروزرسانی نقش انجام نشد");
     }
 
     async removeRole(id) {

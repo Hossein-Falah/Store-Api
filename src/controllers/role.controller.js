@@ -1,6 +1,6 @@
 const autoBind = require("auto-bind");
 const roleService = require("../services/role.service");
-const { roleValidation } = require("../validations/RBAC.validation");
+const { roleValidation, updateRoleValidation } = require("../validations/RBAC.validation");
 const { StatusCodes } = require("http-status-codes");
 const { objectIdValidation } = require("../validations/id.validation");
 
@@ -42,7 +42,18 @@ class RoleController {
 
     async updateRole(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            const roleData = await updateRoleValidation.validateAsync(req.body);
+
+            await this.#service.updateRole(id, roleData);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "نقش با موفقیت ویرایش شد."
+            });
         } catch (error) {
             next(error);
         }
