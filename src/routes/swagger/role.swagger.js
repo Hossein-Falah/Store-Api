@@ -5,10 +5,10 @@
  *          Role:
  *              type: object
  *              required:
- *                  -   name
+ *                  -   title
  *                  -   description
  *              properties:
- *                  name:
+ *                  title:
  *                      type: string
  *                      description: the username for signup
  *                  description:
@@ -22,9 +22,9 @@
  *          UpdateRole:
  *              type: object
  *              properties:
- *                  name:
+ *                  title:
  *                      type: string
- *                      description: the username for signup
+ *                      description: the title for signup
  *                  description:
  *                      type: string
  *                      description: role description

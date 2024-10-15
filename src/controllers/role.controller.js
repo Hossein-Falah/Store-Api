@@ -1,5 +1,7 @@
 const autoBind = require("auto-bind");
 const roleService = require("../services/role.service");
+const { roleValidation } = require("../validations/RBAC.validation");
+const { StatusCodes } = require("http-status-codes");
 
 class RoleController {
     #service;
@@ -18,9 +20,16 @@ class RoleController {
     };
 
     async createRole(req, res, next) {
-        try {
-            
-        } catch (error) {
+        try {            
+            const { title, description, permissions } = await roleValidation.validateAsync(req.body);
+
+            await this.#service.createRole({ title, description, permissions });
+
+            return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
+                message: "نقش با موفقیت ایجاد شد."
+            })
+        } catch (error) {            
             next(error);
         }
     };
