@@ -16,6 +16,7 @@ const RoleSchema = new Schema({
         default: []
     }
 }, {
+    id: false,
     toJSON: {
         virtuals: true
     }

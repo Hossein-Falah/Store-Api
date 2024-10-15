@@ -13,7 +13,12 @@ class RoleController {
 
     async getAllRoles(req, res, next) {
         try {
-            
+            const roles = await this.#service.getAllRoles();
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                roles
+            })
         } catch (error) {
             next(error)
         }

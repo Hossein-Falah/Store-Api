@@ -11,7 +11,8 @@ class RoleService {
     };
 
     async getAllRoles() {
-        
+        const roles = await this.#model.find({});
+        return roles;
     };
 
     async createRole({ title, description, permissions }) {
