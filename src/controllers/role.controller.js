@@ -2,6 +2,7 @@ const autoBind = require("auto-bind");
 const roleService = require("../services/role.service");
 const { roleValidation } = require("../validations/RBAC.validation");
 const { StatusCodes } = require("http-status-codes");
+const { objectIdValidation } = require("../validations/id.validation");
 
 class RoleController {
     #service;
@@ -49,7 +50,16 @@ class RoleController {
 
     async removeRole(req, res, next) {
         try {
-            
+            const { id } = req.params;
+
+            await objectIdValidation.validateAsync({ id });
+
+            await this.#service.removeRole(id);
+
+            return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
+                message: "نقش با موفقیت حذف شد."
+            });
         } catch (error) {
             next(error);
         }

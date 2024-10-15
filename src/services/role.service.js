@@ -26,13 +26,21 @@ class RoleService {
         
     }
 
-    async removeRole() {
-        
+    async removeRole(id) {
+        await this.checkExistRoleById(id);
+
+        const deleteRole = await this.#model.deleteOne({ _id: id });
+        if (!deleteRole.deletedCount) throw new createHttpError.InternalServerError("حذف نقش انجام نشد");
     }
 
     async checkExistRoleWithTitle({ title }) {
         const role = await this.#model.findOne({ title });
         if (role) throw new createHttpError.Conflict("نقش یا رول قبلا تعریف شده")
+    };
+
+    async checkExistRoleById(id) {
+        const role = await this.#model.findById(id);
+        if (!role) throw new createHttpError.NotFound("نقش یافت نشد")
     };
 };
 
