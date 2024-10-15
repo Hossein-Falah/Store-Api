@@ -7,6 +7,8 @@ module.exports = {
     }),
     PERMISSIONS: Object.freeze({
         USER: ["profile"],
-        ADMIN: ["all"]
+        ADMIN: ["all"],
+        WRITER: ["blog"],
+        ALL: "all"
     })
 }

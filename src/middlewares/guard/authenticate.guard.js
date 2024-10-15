@@ -26,6 +26,9 @@ const authenticateToken = async (req, res, next) => {
         req.user = user;
         next();
     } catch (error) {
+        if (error.name === "TokenExpiredError") {
+            return next(new createHttpError.Unauthorized("لطفا مجددا وارد شوید"));
+        }
         next(error);
     }
 };

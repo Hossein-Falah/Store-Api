@@ -14,11 +14,14 @@ const { DepartmentRoutes } = require("./department.routes");
 const { TicketRoutes } = require("./ticket.routes");
 const { PermissionRoutes } = require("./permission.routes");
 const { RoleRoutes } = require("./role.routes");
+const { authenticateToken } = require("../middlewares/guard/authenticate.guard");
+const { checkPermission } = require("../middlewares/guard/permission.guard");
+const { PERMISSIONS } = require("../constants/constants");
 
 const router = Router();
 
 router.use('/auth', AuthRoutes);
-router.use('/user', UserRoutes);
+router.use('/user', authenticateToken, UserRoutes);
 router.use('/categories', CategoriesRoutes);
 router.use('/blogs', BlogRoutes);
 router.use(`/comments`, CommentRoutes);
@@ -30,8 +33,8 @@ router.use(`/products`, ProductRoutes);
 router.use(`/discount`, DiscountRoutes);
 router.use(`/department`, DepartmentRoutes);
 router.use(`/ticket`, TicketRoutes);
-router.use(`/permission`, PermissionRoutes);
-router.use(`/role`, RoleRoutes);
+router.use(`/permission`, authenticateToken, checkPermission([PERMISSIONS.ADMIN]), PermissionRoutes);
+router.use(`/role`, authenticateToken, checkPermission([PERMISSIONS.ADMIN]), RoleRoutes);
 
 module.exports = {
     AllRoutes: router
